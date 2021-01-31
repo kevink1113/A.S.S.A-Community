@@ -3,7 +3,7 @@ from . import models
 
 
 @admin.register(models.Comment)
-class PostAdmin(admin.ModelAdmin):
-    """ Post Admin Definition """
+class CommentAdmin(admin.ModelAdmin):
+    """ Comment Admin Definition """
 
     list_display = ("__str__", "like_sum")

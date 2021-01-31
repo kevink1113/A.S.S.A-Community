@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    {% for user in users %}
+        <div>
+            <img style="width: 100px; height: 130px;" src="media/{{ user.avatar }}"/>
+
+            <a href="{% url "users:detail" user.pk %}">
+                {{ user.username }} >
+                {{ user.last_name }}{{ user.first_name }}
+            </a>
+
+            {{ user.bio }}
+            {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
+                🪖군 복무 중
+                <div>
+                    {{ user.mil_start|date:'전역일 Y.m.d' }}
+                    {{ user.mil_fin|date:'전역일 Y.m.d' }}
+                    전역까지 {{ user.mil_fin|timeuntil }}
+                    (D-{{ user.mil_left_date }})
+                    {{ user.mil_percentage }}% 수료.
+                </div>
+            {% endif %}
+            {% if user.homepage != None %}
+                <a href={{ user.homepage }}>HomePage ></a>
+            {% endif %}
+            {% if user.blog != None %}
+                <a href={{ user.blog }}>Blog ></a>
+            {% endif %}
+
+
+            {% if user.birthdate|date:"md" == today|date:"md" %}
+                <b>🥳 오늘 생일 🎂</b>
+            {% endif %}
+
+            {% widthratio user.mil_fin today 100 %}
+            {% comment %}
+                // {% now "md" %}
+                {% if date_created|date:"YmdHis" < now|date:"YmdHis" %}
+                {% endif %}
+            {% endcomment %}
+
+
+        </div>
+    {% endfor %}
+
+    <h5>
+    </h5>
+{% endblock content %}
+

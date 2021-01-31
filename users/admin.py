@@ -34,9 +34,9 @@ class CustomUserAdmin(UserAdmin):
     )
     list_filter = ("is_soldier",) + UserAdmin.list_filter
     list_display = (
-        "student_id",
         "username",
         "first_name",
+        "student_id",
         "is_soldier",
         "birthdate",
         "homepage",
