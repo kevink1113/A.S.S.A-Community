@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 
 {% block page_title %}
-    Home
+    {{ room.name }}
 {% endblock %}
 
 {% block content %}
-    {% for user in users %}
-        <div>
+    <div>
             <img style="width: 100px; height: 130px;" src="media/{{ user.avatar }}"/>
 
             <a href="{% url "users:detail" user.pk %}">
@@ -38,7 +37,7 @@
                 <a href={{ user.blog }}>Blog ></a>
             {% endif %}
 
-        
+
 
             {% if user.birthdate|date:"md" == today|date:"md" %}
                 <b>🥳 오늘 생일 🎂</b>
@@ -52,9 +51,4 @@
 
 
         </div>
-    {% endfor %}
-
-    <h5>
-    </h5>
-{% endblock content %}
-
+{%  endblock %}
