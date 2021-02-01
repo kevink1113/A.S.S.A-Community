@@ -2,13 +2,14 @@ from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from . import models, forms
+from math import floor
 
 
 class PostList(ListView):
     """ PostList Definition """
     model = models.Post
     paginate_by = 5
-    paginate_orphans = 3
+    paginate_orphans = 0
     ordering = "-created"
     context_object_name = "posts"
 
@@ -16,56 +17,63 @@ class PostList(ListView):
 class PostDetail(DetailView):
     """ PostDetail Definition """
     model = models.Post
+    pk = models.Post.pk
+
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data(**kwargs)
+        # models.Post.objects.count()
+        pk = self.kwargs['pk']
+        page_idx = models.Post.objects.count() - pk
+        page_idx = floor(page_idx / 5) + 1
+        if page_idx == 0:
+            page_idx = 1
+        # print("PK: ", page_idx)
+        """
+        pk = self.kwargs['pk']
+        blist = models.Post.objects.order_by("-created")
+        position = list(blist).index(pk)
+        if position == 0:
+            page = "1"
+        else:
+            page = math.floor(position / 5) + 1
+        context['page'] = page
+        """
+        context['page_idx'] = page_idx
+        return context
 
 
 class SearchView(View):
     """ SearchView Definition """
 
     def get(self, request):
-        country = request.GET.get("country")
-        if country:
-            form = forms.SearchForm(request.GET)
-            if form.is_valid():
-                city = form.cleaned_data.get("city")
+        title = request.GET.get("title")
 
-                filter_args = {}
+        form = forms.SearchForm(request.GET)
+        if form.is_valid():
+            title = form.cleaned_data.get("title")
+            user = form.cleaned_data.get("user")
 
-                if city != "Anywhere":
-                    filter_args["city__startswith"] = city
+            filter_args = {}
 
-                filter_args["country"] = country
+            if title != "":
+                filter_args["title__contains"] = title
 
-                if room_type is not None:
-                    filter_args["room_type"] = room_type
+            if user is not None:
+                filter_args["user"] = user
 
-                if price is not None:
-                    filter_args["price__lte"] = price
+            qs = models.Post.objects.filter(**filter_args).order_by("-created")
 
-                if guests is not None:
-                    filter_args["guests__gte"] = guests
+            paginator = Paginator(qs, 10, orphans=0)
 
-                if bedrooms is not None:
-                    filter_args["bedrooms__gte"] = bedrooms
+            page = request.GET.get("page", 1)
 
-                if beds is not None:
-                    filter_args["beds__gte"] = beds
+            posts = paginator.get_page(page)
 
-                if baths is not None:
-                    filter_args["baths__gte"] = baths
-
-                qs = models.Post.objects.filter(**filter_args).order_by("-created")
-
-                paginator = Paginator(qs, 10, orphans=5)
-
-                page = request.GET.get("page", 1)
-
-                posts = paginator.get_page(page)
-
-                return render(
-                    request, "rooms/search.html", {"form": form, "posts": posts}
-                )
+            return render(
+                request, "posts/search.html", {"form": form, "posts": posts}
+            )
 
         else:
             form = forms.SearchForm()
 
-        return render(request, "rooms/search.html", {"form": form})
+        return render(request, "posts/search.html", {"form": form})

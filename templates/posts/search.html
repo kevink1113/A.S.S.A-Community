@@ -17,10 +17,14 @@
     </form>
 
     <h3>Results</h3>
+    {% for post in posts %}
+        <ul>
+            <li><a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a></li>
+        </ul>
 
-    {% for room in rooms %}
-        <h3>{{room.name}}</h3>
-    {% endfor %}
 
+
+
+    {%  endfor %}
 
 {% endblock content %}

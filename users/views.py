@@ -37,7 +37,7 @@ def UserDetail(request, pk):
             date_left = datetime.timedelta(days=1)
             mil_time = datetime.timedelta(days=1)
 
-        user.mil_percentage = 100 * (round(1 - date_left / mil_time, 4))
+        user.mil_percentage = round(100*(1 - date_left / mil_time), 2)
         user.mil_left_date = date_left.days
 
     recent_posts = post_models.Post.objects.filter(user=user).order_by('-created')[:5]
@@ -60,7 +60,7 @@ def UserView(request):
                 date_left = datetime.timedelta(days=1)
                 mil_time = datetime.timedelta(days=1)
 
-            user.mil_percentage = 100 * (round(1 - date_left / mil_time, 4))
+            user.mil_percentage = round(100*(1 - date_left / mil_time), 2)
             user.mil_left_date = date_left.days
 
     recent_posts = post_models.Post.objects.order_by('-created')[:5]

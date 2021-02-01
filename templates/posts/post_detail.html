@@ -19,9 +19,12 @@
         <h3>Comments</h3>
         <ul>
             {% for comment in post.comments.all%}
-                <li>{{ comment.content }}</li>
+                <li>{{ comment.user }} - {{ comment.content }}</li>
             {% endfor %}
         </ul>
+
+        <h1> PAGE:  {{ help }}</h1>
+        <a href="{%  url 'posts:list'%}?page={{ page_idx }}">목록으로</a>
 
     </div>
 {%  endblock %}
