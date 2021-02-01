@@ -1,10 +1,13 @@
-from django.views.generic import ListView, DetailView, View
+from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView, View, FormView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from . import models, forms
 from math import floor
 from django.http import HttpResponse
+from .forms import PostForm
+from .models import Post
 
 
 class PostList(ListView):
@@ -75,6 +78,7 @@ class SearchView(View):
         return render(request, "posts/search.html", {"form": form})
 
 
+@login_required
 def LikePost(request, pk):
     post = models.Post.objects.get(pk=pk)
     # print(post)
@@ -95,6 +99,7 @@ def LikePost(request, pk):
     # return reverse("posts:detail", kwargs={"pk": pk})
 
 
+@login_required
 def disLikePost(request, pk):
     post = models.Post.objects.get(pk=pk)
     # 이미 추천이 있다면 먼저 이를 취소한다.
@@ -110,6 +115,38 @@ def disLikePost(request, pk):
     # return render(request, "posts/post_detail.html", {"pk": pk})
     # return redirect(reverse("posts:detail"))
     return redirect('posts:detail', pk)
+
+
+"""
+def new_post(request):
+    form = PostForm()
+    return render(request, 'posts/new_post.html', {"form": form})
+"""
+
+"""
+class NewPost(FormView):
+    form_class = forms.PostForm
+    template_name = "posts/new_post.html"
+    success_url = reverse_lazy("posts:list")
+"""
+
+
+def NewPost(request):
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = Post(**form.cleaned_data)
+            post.user = request.user
+            post.save()
+            return redirect('posts:list')
+    else:
+        form = PostForm()
+    context = {
+        'form': form
+    }
+    # return render(request, 'core/post_create.html', context)
+    return render(request, 'posts/new_post.html', context)
+
 
 """
 from django.urls import reverse

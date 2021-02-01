@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, View, UpdateView
 from django.views.generic import FormView
 from django.contrib.auth.views import PasswordChangeView
@@ -28,6 +29,7 @@ class LoginView(View):
         pass
 
 
+@login_required
 def UserDetail(request, pk):
     user = models.User.objects.get(pk=pk)
 

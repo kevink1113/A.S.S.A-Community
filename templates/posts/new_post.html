@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block page_title %}
+    New Post
+{% endblock page_title %}
+
+{% block search-bar %}
+{% endblock search-bar %}
+
+{% block content %}
+    Hello!
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+            {{ form|safe }}
+        </table>
+        <input type="submit" value="제출">
+    </form>
+{% endblock content %}

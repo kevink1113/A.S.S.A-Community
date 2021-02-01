@@ -9,4 +9,6 @@ urlpatterns = [
     path("search/", views.SearchView.as_view(), name="search"),
     path("like/<int:pk>/", views.LikePost, name="LikePost"),
     path("dislike/<int:pk>/", views.disLikePost, name="disLikePost"),
+    path("new/", views.NewPost, name="new_post"),
+    # url(r'^posts/new/$', views.new_post, name='new_post'),
 ]

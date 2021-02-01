@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "posts.apps.PostConfig",
     "comments.apps.CommentsConfig",
+    "django_summernote",
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,5 @@ AUTH_USER_MODEL = "users.User"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 MEDIA_URL = "/media/"
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
