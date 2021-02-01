@@ -7,4 +7,6 @@ urlpatterns = [
     path("", views.PostList.as_view(), name="list"),
     path("<int:pk>", views.PostDetail.as_view(), name="detail"),
     path("search/", views.SearchView.as_view(), name="search"),
+    path("like/<int:pk>/", views.LikePost, name="LikePost"),
+    path("dislike/<int:pk>/", views.disLikePost, name="disLikePost"),
 ]

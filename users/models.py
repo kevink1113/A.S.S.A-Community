@@ -23,8 +23,8 @@ class User(AbstractUser):
     boj_id = models.CharField(max_length=30, blank=True, null=True)
     student_id = models.PositiveIntegerField(blank=True, null=True)
 
-    like_posts = models.ManyToManyField( "posts.Post", blank=True, related_name="like_posts")
-    like_comments = models.ManyToManyField("comments.Comment", blank=True, related_name='like_comments')
+    # like_posts = models.ManyToManyField( "posts.Post", blank=True, related_name="like_posts")
+    # like_comments = models.ManyToManyField("comments.Comment", blank=True, related_name='like_comments')
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"pk": self.pk})

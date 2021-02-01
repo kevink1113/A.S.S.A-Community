@@ -65,7 +65,11 @@ def UserView(request):
             user.mil_left_date = date_left.days
 
     recent_posts = post_models.Post.objects.order_by('-created')[:5]
-    trending_posts = post_models.Post.objects.annotate(like_sum=F('like') - F('dislike')).order_by('-like_sum')[:5]
+
+    trending_posts = post_models.Post.objects.annotate(like_sum=Count('like_users') - Count('dislike_users')).order_by(
+        '-like_sum', '-created')[:5]
+
+    # trending_posts = post_models.Post.objects.annotate(like_sum=F('like') - F('dislike')).order_by('-like_sum')[:5]
 
     # recent_posts.annotate(comments_cnt=Count(comment_models.Comment))
     # trending_posts.annotate(comments_cnt=Count(comment_models.Comment))
