@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>{{ post.title }}</h1>
+        <h3>{{ post.content }}</h3>
+    </div>
+    <div>
+        <h2>
+            By: {{ post.user}}
+            likes: {{ post.like }}
+            dislikes: {{ post.dislike }}
+        </h2>
+
+        <h3>Comments</h3>
+        <ul>
+            {% for comment in post.comments.all%}
+                <li>{{ comment.content }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+{%  endblock %}

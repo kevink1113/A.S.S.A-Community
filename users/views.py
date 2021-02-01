@@ -7,7 +7,6 @@ from . import models, forms
 import datetime
 from django.db.models import F
 from posts import models as post_models
-from comments import models as comment_models
 from django.shortcuts import redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from . import forms
@@ -43,7 +42,6 @@ def UserDetail(request, pk):
 
     recent_posts = post_models.Post.objects.filter(user=user).order_by('-created')[:5]
 
-    recent_posts.annotate(comments_cnt=Count('comment'))
 
     return render(request, "users/user_detail.html",
                   {"user": user, "recent_posts": recent_posts, "today": datetime.date.today()})
