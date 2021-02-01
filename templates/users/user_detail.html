@@ -1,54 +1,64 @@
 {% extends "base.html" %}
 
 {% block page_title %}
-    {{ room.name }}
+    {{ user.last_name }}{{ user.first_name }}
 {% endblock %}
 
 {% block content %}
     <div>
-            <img style="width: 100px; height: 130px;" src="media/{{ user.avatar }}"/>
+        <img style="width: 100px; height: 130px;" src="/media/{{ user.avatar }}"/>
 
-            <a href="{% url "users:detail" user.pk %}">
-                {{ user.username }} >
-                {{ user.last_name }}{{ user.first_name }}
-            </a>
+        {{ user.username }}
+        {{ user.last_name }}{{ user.first_name }}
+        {{ user.bio }}
+        학번: {{ user.student_id }}
 
-            {{ user.bio }}
-            {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
-                🪖군 복무 중
-                <div>
-                    {{ user.mil_address }}
-                    {{ user.mil_start|date:'입영일 Y.m.d' }}
-                    {{ user.mil_fin|date:'전역일 Y.m.d' }}
-                    전역까지 {{ user.mil_fin|timeuntil }}
-                    (D-{{ user.mil_left_date }})
-                    {{ user.mil_percentage }}% 수료.
-                    <svg viewBox="0 0 100 3" xmlns="http://www.w3.org/2000/svg">
-                        <!-- No dashes nor gaps -->
-                        <line x1="0" y1="1" x2="100" y2="1" stroke="black"/>
-                        <line x1="0" y1="1" x2="{{ user.mil_percentage }}" y2="1" stroke="green"/>
-                    </svg>
-                </div>
-            {% endif %}
-            {% if user.homepage != None %}
-                <a href={{ user.homepage }}>HomePage ></a>
-            {% endif %}
-            {% if user.blog != None %}
-                <a href={{ user.blog }}>Blog ></a>
-            {% endif %}
-
-
-
+        <div>
+            <h3>Basic Info</h3>
+            생일: {{ user.birthdate }}
             {% if user.birthdate|date:"md" == today|date:"md" %}
                 <b>🥳 오늘 생일 🎂</b>
             {% endif %}
+            <ul>
+                <li><a href={{ user.homepage }} target="_blank">HomePage</a></li>
+                <li><a href={{ user.blog }} target="_blank">Blog</a></li>
+                <li>GitHub: <a href="https://github.com/{{ user.github_id }}" target="_blank">{{ user.github_id }}</a></li>
+                <li>BOJ: <a href="https://www.acmicpc.net/user/{{ user.boj_id }}" target="_blank">{{ user.boj_id }}</a></li>
 
-            {% comment %}
-                // {% now "md" %}
-                {% if date_created|date:"YmdHis" < now|date:"YmdHis" %}
-                {% endif %}
-            {% endcomment %}
-
+            </ul>
 
         </div>
-{%  endblock %}
+
+
+        {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
+            <div>
+                <h3>🪖군 정보</h3>
+
+                <ul>
+                    <li>{{ user.mil_address }}</li>
+                    <li>{{ user.mil_start|date:'입영일 Y.m.d' }}</li>
+                    <li>{{ user.mil_fin|date:'전역일 Y.m.d' }}</li>
+                    <li>전역까지 {{ user.mil_fin|timeuntil }} (D-{{ user.mil_left_date }})</li>
+                    <li>{{ user.mil_percentage }}% 수료.</li>
+                    <li><a href="https://www.thecamp.or.kr/eduUnitCafe/viewEduUnitCafeMain.do" target="_blank">인편 쓰러
+                        가기</a></li>
+                </ul>
+
+                <svg viewBox="0 0 100 3" xmlns="http://www.w3.org/2000/svg">
+                    <!-- No dashes nor gaps -->
+                    <line x1="0" y1="1" x2="100" y2="1" stroke="black"/>
+                    <line x1="0" y1="1" x2="{{ user.mil_percentage }}" y2="1" stroke="green"/>
+                </svg>
+            </div>
+        {% endif %}
+
+        <div>
+            <h3>Recent Posts</h3>
+            {% for post in recent_posts %}
+                <li><a href="">{{ post.title }}</a></li>
+            {% endfor %}
+        </div>
+
+
+    </div>
+{% endblock %}

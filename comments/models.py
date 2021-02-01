@@ -7,11 +7,9 @@ class Comment(core_models.TimeStampModel):
 
     content = models.TextField()
     post = models.ForeignKey(
-        "posts.Post", related_name="posts", on_delete=models.CASCADE
+        "posts.Post", related_name="comments", on_delete=models.CASCADE
     )
-    user = models.ForeignKey(
-        "users.User", related_name="user", on_delete=models.CASCADE
-    )
+    user = models.ForeignKey("users.User", related_name="comments", on_delete=models.CASCADE)
     like = models.PositiveIntegerField(default=0)
     dislike = models.PositiveIntegerField(default=0)
 

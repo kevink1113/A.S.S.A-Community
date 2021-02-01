@@ -18,7 +18,6 @@
             {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
                 🪖군 복무 중
                 <div>
-                    {{ user.mil_address }}
                     {{ user.mil_start|date:'입영일 Y.m.d' }}
                     {{ user.mil_fin|date:'전역일 Y.m.d' }}
                     전역까지 {{ user.mil_fin|timeuntil }}
@@ -38,7 +37,7 @@
                 <a href={{ user.blog }}>Blog ></a>
             {% endif %}
 
-        
+
 
             {% if user.birthdate|date:"md" == today|date:"md" %}
                 <b>🥳 오늘 생일 🎂</b>
@@ -54,7 +53,38 @@
         </div>
     {% endfor %}
 
-    <h5>
-    </h5>
+    <div>
+        {{ request.user }}
+        <h3>Recent Posts</h3>
+        {% for post in recent_posts %}
+
+            <li><a href="">{{ post.title }} 추천{{ post.like_sum }} 댓글{{ post.comments.count }}</a></li>
+
+            {%  if post.like_sum >= 10 %}
+                WOW!
+            {% elif post.like_sum <= -10 %}
+                So Sad...
+            {% else %}
+                NORMAL!
+            {%  endif %}
+
+            {% if post in request.user.like_posts.all %}
+                내가 추천한 글!
+            {% endif %}
+            {% if post.user == request.user %}
+                내가 쓴 글!
+            {% endif %}
+            {%  if today|date:"ymd" == post.created|date:"ymd"  %}
+                NEW!!
+            {% endif %}
+        {% endfor %}
+        {{ request.user }}
+
+        <h3>Trending Posts</h3>
+        {% for post in trending_posts %}
+            <li><a href="">{{ post.title }}  추천{{ post.like_sum }} 댓글{{ post.comments.count }}</a></li>
+        {% endfor %}
+
+    </div>
 {% endblock content %}
 

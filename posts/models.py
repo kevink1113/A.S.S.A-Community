@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import Count
 from core import models as core_models
+from comments import models as comment_models
 
 
 class Post(core_models.TimeStampModel):
@@ -8,7 +10,7 @@ class Post(core_models.TimeStampModel):
     title = models.TextField()
     content = models.TextField()
     user = models.ForeignKey(
-        "users.User", related_name="reviews", on_delete=models.CASCADE
+        "users.User", related_name="user_post", on_delete=models.CASCADE
     )
     like = models.PositiveIntegerField(default=0)
     dislike = models.PositiveIntegerField(default=0)
@@ -18,3 +20,4 @@ class Post(core_models.TimeStampModel):
 
     def like_sum(self):
         return self.like - self.dislike
+
