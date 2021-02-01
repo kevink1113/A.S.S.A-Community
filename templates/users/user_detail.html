@@ -55,10 +55,14 @@
         <div>
             <h3>Recent Posts</h3>
             {% for post in recent_posts %}
-                <li><a href="">{{ post.title }}</a></li>
+                <li><a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a></li>
             {% endfor %}
         </div>
+        <a href="{% url "core:home" %}">홈으로 </a>
 
+        {%  if request.user == user %}
+            <a href="{%  url 'users:update' %}">Update Profile</a>
+        {%  endif %}
 
     </div>
 {% endblock %}

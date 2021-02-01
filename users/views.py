@@ -1,5 +1,6 @@
-from django.views.generic import ListView, DetailView, View
+from django.views.generic import ListView, DetailView, View, UpdateView
 from django.views.generic import FormView
+from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views import View
@@ -9,6 +10,7 @@ from django.db.models import F
 from posts import models as post_models
 from django.shortcuts import redirect, reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.messages.views import SuccessMessageMixin
 from . import forms
 from django.db.models import Count
 
@@ -37,11 +39,10 @@ def UserDetail(request, pk):
             date_left = datetime.timedelta(days=1)
             mil_time = datetime.timedelta(days=1)
 
-        user.mil_percentage = round(100*(1 - date_left / mil_time), 2)
+        user.mil_percentage = round(100 * (1 - date_left / mil_time), 2)
         user.mil_left_date = date_left.days
 
     recent_posts = post_models.Post.objects.filter(user=user).order_by('-created')[:5]
-
 
     return render(request, "users/user_detail.html",
                   {"user": user, "recent_posts": recent_posts, "today": datetime.date.today()})
@@ -60,7 +61,7 @@ def UserView(request):
                 date_left = datetime.timedelta(days=1)
                 mil_time = datetime.timedelta(days=1)
 
-            user.mil_percentage = round(100*(1 - date_left / mil_time), 2)
+            user.mil_percentage = round(100 * (1 - date_left / mil_time), 2)
             user.mil_left_date = date_left.days
 
     recent_posts = post_models.Post.objects.order_by('-created')[:5]
@@ -68,8 +69,6 @@ def UserView(request):
 
     # recent_posts.annotate(comments_cnt=Count(comment_models.Comment))
     # trending_posts.annotate(comments_cnt=Count(comment_models.Comment))
-
-
 
     return render(request, "users/user_info.html",
                   {"users": users, "today": datetime.date.today(), "recent_posts": recent_posts,
@@ -107,14 +106,34 @@ class SignUpView(FormView):
     template_name = "users/signup.html"
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
-    initial = {"first_name": "상원", "last_name": "강", "username": "kevink1113"}
+    initial = {"first_name": "상원", "last_name": "강", "email": "kevink1113@hanmail.net"}
 
     def form_valid(self, form):
         form.save()
-        # email = form.cleaned_data.get("email")
-        username = form.cleaned_data.get("username")
+        email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password")
-        user = authenticate(self.request, username=username, password=password)
+        user = authenticate(self.request, username=email, password=password)
         if user is not None:
             login(self.request, user)
         return super().form_valid(form)
+
+
+class UpdateProfileView(SuccessMessageMixin, UpdateView):
+    model = models.User
+    template_name = "users/update-profile.html"
+    fields = (
+        "avatar", "bio", "birthdate",
+    )
+
+    success_message = "Profile Updated"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+class UpdatePasswordView(SuccessMessageMixin, PasswordChangeView):
+    template_name = "users/update-password.html"
+    success_message = "Password Changed"
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()

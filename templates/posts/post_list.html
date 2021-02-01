@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+     <form method="get" action="{% url 'posts:search' %}">
+        <input value="{{ title }}" name="title" placeholder="Search by title!"/>
+    </form>
     {% for post in posts %}
         <h3>
             <a href="{% url "posts:detail" post.pk %}">

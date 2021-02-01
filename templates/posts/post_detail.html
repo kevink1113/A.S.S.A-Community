@@ -11,20 +11,20 @@
     </div>
     <div>
         <h2>
-            By: {{ post.user}}
+            By: {{ post.user }}
             likes: {{ post.like }}
             dislikes: {{ post.dislike }}
         </h2>
 
         <h3>Comments</h3>
         <ul>
-            {% for comment in post.comments.all%}
+            {% for comment in post.comments.all %}
                 <li>{{ comment.user }} - {{ comment.content }}</li>
             {% endfor %}
         </ul>
 
-        <h1> PAGE:  {{ help }}</h1>
-        <a href="{%  url 'posts:list'%}?page={{ page_idx }}">목록으로</a>
+        <h1> PAGE: {{ help }}</h1>
+        <a href="{% url 'posts:list' %}?page={{ page_idx }}">목록으로</a>
 
     </div>
-{%  endblock %}
+{% endblock %}
