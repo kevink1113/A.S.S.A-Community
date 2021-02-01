@@ -5,7 +5,7 @@ from . import models
 class LoginForm(forms.Form):
     username = forms.CharField()
     # email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "비밀번호 입력"}))
 
     def clean(self):
         # email = self.cleaned_data.get("email")
@@ -26,12 +26,20 @@ class LoginForm(forms.Form):
 class SignUpForm(forms.ModelForm):
     class Meta:
         model = models.User
-        fields = ("first_name", "last_name", "username")
+        fields = ("last_name", "first_name", "username", "bio")
+        widgets = {
+            "last_name": forms.TextInput(attrs={"placeholder": "성"}),
+            "first_name": forms.TextInput(attrs={"placeholder": "이름"}),
+        }
 
-    password = forms.CharField(widget=forms.PasswordInput)
-    password1 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+    password = forms.CharField(widget=forms.PasswordInput, label='비밀번호')
+    password1 = forms.CharField(widget=forms.PasswordInput, label="비밀번호 확인")
 
     def clean_password1(self):
+        bio = self.cleaned_data.get("bio")
+        validate = str(bio)
+        if validate.__contains__("동강대 지융미 화이팅") is False:
+            raise forms.ValidationError("You are not an authorized member of A.S.S.A!")
         password = self.cleaned_data.get("password")
         password1 = self.cleaned_data.get("password1")
         if password != password1:

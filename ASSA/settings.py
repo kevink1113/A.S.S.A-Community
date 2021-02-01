@@ -141,3 +141,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 MEDIA_URL = "/media/"
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+LOGIN_URL = "/users/login"

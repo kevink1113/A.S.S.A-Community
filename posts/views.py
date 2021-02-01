@@ -6,11 +6,13 @@ from django.urls import reverse, reverse_lazy
 from . import models, forms
 from math import floor
 from django.http import HttpResponse
+from django.contrib import messages
 from .forms import PostForm
 from .models import Post
+from users import mixins as user_mixins
 
 
-class PostList(ListView):
+class PostList(ListView, user_mixins.LoginRequiredMixin):
     """ PostList Definition """
     model = models.Post
     paginate_by = 5
@@ -19,7 +21,7 @@ class PostList(ListView):
     context_object_name = "posts"
 
 
-class PostDetail(DetailView):
+class PostDetail(DetailView, user_mixins.LoggedInOnlyView):
     """ PostDetail Definition """
     model = models.Post
     pk = models.Post.pk
@@ -47,10 +49,11 @@ class PostDetail(DetailView):
         return context
 
 
-class SearchView(View):
+class SearchView(View, user_mixins.LoginRequiredMixin):
     """ SearchView Definition """
 
     def get(self, request):
+
         title = request.GET.get("title")
         form = forms.SearchForm(request.GET)
         if form.is_valid():
@@ -131,6 +134,7 @@ class NewPost(FormView):
 """
 
 
+@login_required()
 def NewPost(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
@@ -146,6 +150,22 @@ def NewPost(request):
     }
     # return render(request, 'core/post_create.html', context)
     return render(request, 'posts/new_post.html', context)
+
+
+@login_required()
+def delete_post(request, post_pk):
+    # print(f"Should delete {post_pk}")
+    user = request.user
+    try:
+        post = models.Post.objects.get(pk=post_pk)
+        if post.user.pk != user.pk:
+            messages.error(request, "You can't delete that Post!!")
+        else:
+            models.Post.objects.filter(pk=post_pk).delete()
+            messages.success(request, "Post Deleted!")
+        return redirect(reverse("posts:list"))
+    except models.Post.DoesNotExist:
+        return redirect(reverse("core:home"))
 
 
 """

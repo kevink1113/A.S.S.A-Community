@@ -8,7 +8,7 @@ from comments import models as comment_models
 class Post(core_models.TimeStampModel):
     """ Review Model Definition """
 
-    title = models.TextField()
+    title = models.CharField(max_length=30)
     content = models.TextField()
     user = models.ForeignKey(
         "users.User", related_name="user_post", on_delete=models.CASCADE

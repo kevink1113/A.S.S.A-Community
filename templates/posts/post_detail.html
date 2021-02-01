@@ -28,6 +28,7 @@
             <a href="{% url 'posts:disLikePost' post.id %}">dislike</a>
         {% endif %}
 
+        <a href="{% url 'posts:delete' post.pk %}">Delete</a>
 
         <h3>Comments</h3>
         <ul>

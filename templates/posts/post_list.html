@@ -5,45 +5,47 @@
 {% endblock %}
 
 {% block content %}
-    <form method="get" action="{% url 'posts:search' %}">
-        <input value="{{ title }}" name="title" placeholder="Search by title!"/>
-    </form>
-    {% for post in posts %}
-        <h3>
-            {% if post.like_sum >= 4 %}
-                <b><a href="{% url "posts:detail" post.pk %}"> {{ post.title }}</a></b>
-            {% elif post.like_sum <= -4 %}
-                <del><a href="{% url "posts:detail" post.pk %}"> {{ post.title }}</a></del>
-            {% else %}
-                <a href="{% url "posts:detail" post.pk %}"> {{ post.title }}</a>
+    {% if user.is_authenticated %}
+        <form method="get" action="{% url 'posts:search' %}">
+            <input value="{{ title }}" name="title" placeholder="Search by title!"/>
+        </form>
+        {% for post in posts %}
+            <h3>
+                {% if post.like_sum >= 4 %}
+                    <b><a href="{% url "posts:detail" post.pk %}"> {{ post.title }}</a></b>
+                {% elif post.like_sum <= -4 %}
+                    <del><a href="{% url "posts:detail" post.pk %}"> {{ post.title }}</a></del>
+                {% else %}
+                    <a href="{% url "posts:detail" post.pk %}"> {{ post.title }}</a>
+                {% endif %}
+
+                글쓴이 {{ post.user }}
+                추천 {{ post.like_sum }}
+                댓글 {{ post.comments.count }}
+
+                {% if post in request.user.like_posts.all %}
+                    내가 추천한 글!
+                {% endif %}
+                {% if post.user == request.user %}
+                    내가 쓴 글!
+                {% endif %}
+                {% if today|date:"ymd" == post.created|date:"ymd" %}
+                    NEW!!
+                {% endif %}
+            </h3>
+        {% endfor %}
+
+        <h5>
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
             {% endif %}
-
-            글쓴이 {{ post.user }}
-            추천 {{ post.like_sum }}
-            댓글 {{ post.comments.count }}
-
-
-
-            {% if post in request.user.like_posts.all %}
-                내가 추천한 글!
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next</a>
             {% endif %}
-            {% if post.user == request.user %}
-                내가 쓴 글!
-            {% endif %}
-            {% if today|date:"ymd" == post.created|date:"ymd" %}
-                NEW!!
-            {% endif %}
-        </h3>
-    {% endfor %}
-
-    <h5>
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Next</a>
-        {% endif %}
-    </h5>
+        </h5>
+     {% else %}
+        <a href="{% url 'users:login' %}">내용을 보려면 로그인</a>
+    {% endif %}
 {% endblock content %}
 

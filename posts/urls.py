@@ -10,5 +10,6 @@ urlpatterns = [
     path("like/<int:pk>/", views.LikePost, name="LikePost"),
     path("dislike/<int:pk>/", views.disLikePost, name="disLikePost"),
     path("new/", views.NewPost, name="new_post"),
+    path("delete/<int:post_pk>/", views.delete_post, name="delete")
     # url(r'^posts/new/$', views.new_post, name='new_post'),
 ]
