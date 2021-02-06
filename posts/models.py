@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.db.models import Count
 from core import models as core_models

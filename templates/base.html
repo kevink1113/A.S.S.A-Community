@@ -1,15 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="w-full">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <title>{% block page_title %}{% endblock %} | A.S.S.A</title>
+
+
 </head>
-<body>
-<header>
+<body class="container mt-28 w-9/12 sm:w-11/12 mx-auto">
+<header class="container inset-0 flex shadow-2xl fixed w-screen z-50 max-w-full flex items-center justify-between px-6 h-20 border-b border-gray-400 bg-white">
+        <a href="{% url "core:home" %}" class="mr-6">
+            <img class="w-40 bg-cover bg-center" src="{% static 'img/ASSA_logotype.png' %}"/>
+        </a>
     {% include "partials/nav.html" %}
 </header>
 
 {% block content %}{% endblock %}
+
 
 {% include "partials/footer.html" %}
 

@@ -5,40 +5,42 @@
 {% endblock %}
 
 {% block content %}
-    <div>
-        <h1>{{ post.title }}</h1>
-        <h3>{{ post.content | safe }}</h3>
-    </div>
-    <div>
-        <h2>
-            By: {{ post.user }}
-            likes: {{ post.like_users.count }}
-            dislikes: {{ post.dislike_users.count }}
-        </h2>
+    {% if user.is_authenticated %}
+        <div>
+            <h1>{{ post.title }}</h1>
+            <h3>{{ post.content | safe }}</h3>
+        </div>
+        <div>
+            <h2>
+                By: {{ post.user }}
+                likes: {{ post.like_users.count }}
+                dislikes: {{ post.dislike_users.count }}
+            </h2>
 
-        {% if user in post.like_users.all %}
-            <a href="{% url 'posts:LikePost' post.id %}">LIKE</a>
-        {% else %}
-            <a href="{% url 'posts:LikePost' post.id %}">like</a>
-        {% endif %}
+            {% if user in post.like_users.all %}
+                <a href="{% url 'posts:LikePost' post.id %}">LIKE</a>
+            {% else %}
+                <a href="{% url 'posts:LikePost' post.id %}">like</a>
+            {% endif %}
 
-        {% if user in post.dislike_users.all %}
-            <a href="{% url 'posts:disLikePost' post.id %}">DISLIKE</a>
-        {% else %}
-            <a href="{% url 'posts:disLikePost' post.id %}">dislike</a>
-        {% endif %}
+            {% if user in post.dislike_users.all %}
+                <a href="{% url 'posts:disLikePost' post.id %}">DISLIKE</a>
+            {% else %}
+                <a href="{% url 'posts:disLikePost' post.id %}">dislike</a>
+            {% endif %}
 
-        <a href="{% url 'posts:delete' post.pk %}">Delete</a>
+            <a href="{% url 'posts:delete' post.pk %}">Delete</a>
 
-        <h3>Comments</h3>
-        <ul>
-            {% for comment in post.comments.all %}
-                <li>{{ comment.user }} - {{ comment.content }}</li>
-            {% endfor %}
-        </ul>
+            <h3>Comments</h3>
+            <ul>
+                {% for comment in post.comments.all %}
+                    <li>{{ comment.user }} - {{ comment.content }}</li>
+                {% endfor %}
+            </ul>
 
-        <h1> PAGE: {{ help }}</h1>
-        <a href="{% url 'posts:list' %}?page={{ page_idx }}">목록으로</a>
+            <h1> PAGE: {{ help }}</h1>
+            <a href="{% url 'posts:list' %}?page={{ page_idx }}">목록으로</a>
 
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}

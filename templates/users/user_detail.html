@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block page_title %}
     {{ user.last_name }}{{ user.first_name }}
@@ -6,7 +7,12 @@
 
 {% block content %}
     <div>
-        <img style="width: 100px; height: 130px;" src="/media/{{ user.avatar }}"/>
+        {%  if user.avatar != '' %}
+            <img style="width: 100px; height: 130px;" src="/media/{{ user.avatar }}"/>
+        {%  else %}
+            <img style="width: 100px; height: 130px;" src="{% static 'img/blank_profile.png' %}"/>
+        {%  endif %}
+
 
         {{ user.username }}
         {{ user.last_name }}{{ user.first_name }}

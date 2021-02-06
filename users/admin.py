@@ -26,7 +26,6 @@ class CustomUserAdmin(UserAdmin):
                     "github_id",
                     "blog",
                     "boj_id",
-                    "like_posts",
                 )
             },
         ),
@@ -46,4 +45,4 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
     )
 
-    filter_horizontal = ("like_posts",)
+    # filter_horizontal = ("like_posts",)

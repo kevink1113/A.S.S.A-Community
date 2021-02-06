@@ -1,0 +1,23 @@
+{
+  "name": "assa",
+  "version": "1.0.0",
+  "description": "A.S.S.A comunity site development",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevink1113/A.S.S.A-Community.git"
+  },
+  "scripts": {
+    "css": "gulp"
+  },
+  "homepage": "https://github.com/kevink1113/A.S.S.A-Community#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.2.4",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-postcss": "^9.0.0",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^5.0.0",
+    "tailwindcss": "^2.0.2"
+  },
+  "dependencies": {}
+}

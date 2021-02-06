@@ -10,9 +10,18 @@ from django.contrib import messages
 from .forms import PostForm
 from .models import Post
 from users import mixins as user_mixins
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.backends import Permission
 
 
-class PostList(ListView, user_mixins.LoginRequiredMixin):
+class PostList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin):
+    raise_exception = True
+    permission_required = 'post.view_post'
+    """
+    permissions = (
+        ('can_')
+    )
+    """
     """ PostList Definition """
     model = models.Post
     paginate_by = 5
@@ -21,7 +30,15 @@ class PostList(ListView, user_mixins.LoginRequiredMixin):
     context_object_name = "posts"
 
 
-class PostDetail(DetailView, user_mixins.LoggedInOnlyView):
+class PostDetail(DetailView, user_mixins.LoggedInOnlyView, PermissionRequiredMixin):
+    raise_exception = True
+    permission_required = 'post.view_post'
+    """
+    class Meta:
+        permission_required = (
+            ("view_post", "can view post"),
+        )
+    """
     """ PostDetail Definition """
     model = models.Post
     pk = models.Post.pk
@@ -51,6 +68,7 @@ class PostDetail(DetailView, user_mixins.LoggedInOnlyView):
 
 class SearchView(View, user_mixins.LoginRequiredMixin):
     """ SearchView Definition """
+
 
     def get(self, request):
 

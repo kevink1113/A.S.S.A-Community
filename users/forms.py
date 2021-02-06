@@ -30,10 +30,17 @@ class SignUpForm(forms.ModelForm):
         widgets = {
             "last_name": forms.TextInput(attrs={"placeholder": "성"}),
             "first_name": forms.TextInput(attrs={"placeholder": "이름"}),
+            "username": forms.TextInput(attrs={"placeholder": "닉네임"}),
+            "bio": forms.TextInput(attrs={"placeholder": "하고 싶은 말"}),
         }
 
-    password = forms.CharField(widget=forms.PasswordInput, label='비밀번호')
-    password1 = forms.CharField(widget=forms.PasswordInput, label="비밀번호 확인")
+    password = forms.CharField(
+        widget = forms.PasswordInput(attrs={"placeholder": "비밀번호"})
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "비밀번호 확인"})
+    )
+    # password1 = forms.CharField(widget=forms.PasswordInput, label="비밀번호 확인")
 
     def clean_password1(self):
         bio = self.cleaned_data.get("bio")

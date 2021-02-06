@@ -33,6 +33,8 @@ class LoginView(View):
 def UserDetail(request, pk):
     user = models.User.objects.get(pk=pk)
 
+    # per = user.user_permissions.all()
+    # print("권한들: ", per)
     if user.mil_fin is not None and user.mil_start is not None and user.is_soldier is not None:
         date_left = user.mil_fin - datetime.date.today()
         mil_time = user.mil_fin - user.mil_start
@@ -54,6 +56,8 @@ def UserView(request):
     users = models.User.objects.all()
 
     for user in users:
+        # print(user.avatar)
+
         if user.mil_fin is not None and user.mil_start is not None and user.is_soldier is not None:
             date_left = user.mil_fin - datetime.date.today()
             mil_time = user.mil_fin - user.mil_start
@@ -112,7 +116,7 @@ class SignUpView(FormView):
     template_name = "users/signup.html"
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
-    initial = {"first_name": "상원", "last_name": "강", "username": "kevink1113"}
+    # initial = {"first_name": "상원", "last_name": "강", "username": "kevink1113"}
 
     def form_valid(self, form):
         form.save()
