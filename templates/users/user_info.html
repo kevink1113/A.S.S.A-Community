@@ -7,8 +7,8 @@
 
 {% block content %}
 
-    <div class="flex flex-wrap">
-        <div>
+    <div class="flex flex-wrap justify-center">
+        <div class="xl:w-8/12 max-w-3xl md:w-full">
             {% for user in users %}
                 <div class="flex flex-wrap m-4 p-4 rounded shadow items-center">
                     {% if user.avatar != '' %}
@@ -24,21 +24,20 @@
                             <span>{{ user.username }} ></span>
                         </a>
 
-                        {{ user.bio }}
+                        <p class="italic">{{ user.bio }}</p>
                         {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
-                            🪖군 복무 중
-                            <div>
-                                {{ user.mil_start|date:'입영일 Y.m.d' }}
-                                {{ user.mil_fin|date:'전역일 Y.m.d' }}
-                                전역까지 {{ user.mil_fin|timeuntil }}
-                                (D-{{ user.mil_left_date }})
-                                {{ user.mil_percentage }}% 수료.
-                                <svg viewBox="0 0 100 3" xmlns="http://www.w3.org/2000/svg">
-                                    <!-- No dashes nor gaps -->
-                                    <line x1="0" y1="1" x2="100" y2="1" stroke="lightgray"/>
-                                    <line x1="0" y1="1" x2="{{ user.mil_percentage }}" y2="1" stroke="rgb(23, 168, 201)"/>
-                                </svg>
-                            </div>
+                            <p class="text-sm">
+                                🪖군 복무 중 {{ user.mil_start|date:'Y.m.d' }} ~ {{ user.mil_fin|date:'Y.m.d' }}<br>
+                                전역까지 {{ user.mil_fin|timeuntil }} (D-{{ user.mil_left_date }})
+                            </p>
+
+                            <p class="text-xs">{{ user.mil_percentage }}% 수료</p>
+                            <svg viewBox="0 0 100 2" xmlns="http://www.w3.org/2000/svg">
+                                <!-- No dashes nor gaps -->
+                                <line x1="0" y1="1" x2="100" y2="1" stroke="lightgray"/>
+                                <line x1="0" y1="1" x2="{{ user.mil_percentage }}" y2="1" stroke="rgb(23, 168, 201)"/>
+                            </svg>
+
                         {% endif %}
                         {% if user.homepage != None %}
                             <a href={{ user.homepage }}>HomePage ></a>
@@ -62,47 +61,27 @@
             {% endfor %}
         </div>
 
-        <div>
+        <div class="max-w-full w-full xl:w-80 sm:w-full md:w-full">
             {% if user.is_authenticated %}
-                <div class="w-full">
+
                     <div class="m-4 p-4 rounded shadow">
 
                         <p class="font-medium text-lg pb-2">Recent Posts</p>
                         {% for post in recent_posts %}
                             <div class="flex items-center">
-                                {% if post.user == request.user %}
-                                    <i class="fas fa-user text-gray-400 text-xs pr-1.5"></i>
-                                {% endif %}
 
+                                {# Post 이름, 좋아요/댓글 개수 #}
                                 <p class="flex items-center justify-between w-full">
                                     <a href="{% url "posts:detail" post.pk %}" class="text-sm">
-                                        <span class="w-9/12 block truncate">{{ post.title }}</span>
+                                        <span class="block truncate">{{ post.title | truncatechars:22 }}</span>
                                     </a>
-                                    <span class="w-16 flex items-center justify-between text-mint font-medium text-sm">
+                                </p>
+                                <span class="text-mint font-medium text-sm flex items-center w-16 justify-between">
                                         <i class="fas fa-arrows-alt-v"></i>
                                         {{ post.like_sum }}
                                         <i class="fas fa-comment"></i>
                                         {{ post.comments.count }}
-                                    </span>
-                                </p>
-
-                                {% comment %}
-                                {% if post.like_sum >= 4 %}
-                                    WOW!
-                                {% elif post.like_sum <= -4 %}
-                                    So Sad...
-                                {% else %}
-                                    NORMAL!
-                                {% endif %}
-
-                                {% if post in request.user.like_posts.all %}
-                                    내가 추천한 글!
-                                {% endif %}
-
-                                {% if today|date:"ymd" == post.created|date:"ymd" %}
-                                    NEW!!
-                                {% endif %}
-                                {% endcomment %}
+                                </span>
                             </div>
                         {% endfor %}
                     </div>
@@ -117,8 +96,6 @@
                             </p>
                         {% endfor %}
                     </div>
-
-                </div>
             {% endif %}
         </div>
     </div>
