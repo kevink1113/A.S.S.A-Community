@@ -14,7 +14,7 @@ class Comment(core_models.TimeStampModel):
     dislike = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.user} - {self.created}"
+        return f"{self.post} - {self.content}"
 
     def like_sum(self):
         return self.like - self.dislike

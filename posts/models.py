@@ -8,12 +8,26 @@ from comments import models as comment_models
 
 class Post(core_models.TimeStampModel):
     """ Review Model Definition """
+    ANONYMOUS = "anon"
+    NOTICE = "notice"
+    FREE = "free"
+
+    BOARD_CHOICES = (
+        (NOTICE, "공지"),
+        (FREE, "자유게시판"),
+        (ANONYMOUS, "익명게시판"),
+    )
 
     title = models.CharField(max_length=30)
     content = models.TextField()
     user = models.ForeignKey(
         "users.User", related_name="user_post", on_delete=models.CASCADE
     )
+
+    board = models.CharField(
+        choices=BOARD_CHOICES, max_length=10, default=FREE
+    )
+
     # like = models.PositiveIntegerField(default=0)
     # dislike = models.PositiveIntegerField(default=0)
 
@@ -21,7 +35,7 @@ class Post(core_models.TimeStampModel):
     dislike_users = models.ManyToManyField("users.User", related_name='dislike_posts', blank=True)
 
     def __str__(self):
-        return f"{self.title} - {self.user}"
+        return self.title
 
     def like_sum(self):
         return self.like_users.count() - self.dislike_users.count()

@@ -6,4 +6,6 @@ from . import models
 class CommentAdmin(admin.ModelAdmin):
     """ Comment Admin Definition """
 
-    list_display = ("__str__", "like_sum")
+    list_filter = ("user",)
+
+    list_display = ("__str__", "post", "user", "like_sum")
