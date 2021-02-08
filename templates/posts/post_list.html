@@ -6,6 +6,28 @@
 
 {% block content %}
     {% if user.is_authenticated %}
+        <div class="flex justify-center flex-wrap">
+            {% if board == "notice" %}
+                <a href="{% url 'posts:notice' %}"><span class="boards_list"><i class="fas fa-bullhorn bg-mint"></i>공지</span></a>
+            {% else %}
+                <a href="{% url 'posts:notice' %}"><span class="boards_list"><i class="fas fa-bullhorn bg-gray-400"></i>공지</span></a>
+            {% endif %}
+
+            {% if board == "free" %}
+                <a href="{% url 'posts:free' %}"><span class="boards_list"><i class="fas fa-user-friends bg-mint"></i>자유게시판</span></a>
+            {% else %}
+                <a href="{% url 'posts:free' %}"><span class="boards_list"><i class="fas fa-user-friends bg-gray-400"></i>자유게시판</span></a>
+            {% endif %}
+
+            {% if board == "anon" %}
+                <a href="{% url 'posts:anon' %}"><span class="boards_list"><i class="fas fa-shoe-prints bg-mint"></i>익명게시판</span></a>
+            {% else %}
+                <a href="{% url 'posts:anon' %}"><span class="boards_list"><i class="fas fa-shoe-prints bg-gray-400"></i>익명게시판</span></a>
+            {% endif %}
+
+
+
+        </div>
         <form method="get" action="{% url 'posts:search' %}">
             <input value="{{ title }}" name="title" placeholder="Search by title!"/>
         </form>

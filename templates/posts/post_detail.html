@@ -80,7 +80,7 @@
                     </div>
 
                     {% if request.user == post.user %}
-                        <a href="{% url 'posts:delete' post.pk %}"><i class="fas fa-trash-alt"></i></a>
+                        <a href="{% url 'posts:delete' post.pk %}" onclick="return confirm('정말로 이 글을 삭제할 것임?')"><i class="fas fa-trash-alt"></i></a>
                     {% endif %}
 
                     {% if request.user == post.user %}

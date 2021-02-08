@@ -24,6 +24,11 @@ class AnonList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     ordering = "-created"
     context_object_name = "posts"
 
+    def get_context_data(self, **kwargs):
+        context = super(AnonList, self).get_context_data(**kwargs)
+        context['board'] = "anon"
+        return context
+
 
 class NoticeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin):
     """ PostList Definition """
@@ -34,6 +39,11 @@ class NoticeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMix
     ordering = "-created"
     context_object_name = "posts"
 
+    def get_context_data(self, **kwargs):
+        context = super(NoticeList, self).get_context_data(**kwargs)
+        context['board'] = "notice"
+        return context
+
 
 class FreeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin):
     """ PostList Definition """
@@ -43,6 +53,11 @@ class FreeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     paginate_orphans = 0
     ordering = "-created"
     context_object_name = "posts"
+
+    def get_context_data(self, **kwargs):
+        context = super(FreeList, self).get_context_data(**kwargs)
+        context['board'] = "free"
+        return context
 
 
 class PostList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin):

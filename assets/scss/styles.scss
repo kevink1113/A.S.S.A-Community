@@ -9,5 +9,12 @@
   background: rgba(255, 255, 255, 0.8);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
+}
 
+.boards_list {
+  transition: box-shadow 0.3s linear;
+  @apply pr-2 py-0.5 bg-gray-100 rounded-full mr-2 text-base shadow-md hover:shadow-xl border-4 border-white font-extralight;
+  i {
+    @apply text-xl px-1 text-white rounded-full mr-1;
+  }
 }

@@ -5,7 +5,7 @@
     {% if user.is_authenticated %}
         <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url "users:logout" %}">Log out</a></li>
         <li class="mr-3 sm:mr-6"><a href="{% url 'posts:list' %}">Posts</a></li>
-        <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url 'posts:new_post' %}"><i class="fas fa-plus"></i></a></li>
+        <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url 'posts:new_post' %}"><i class="fas fa-plus text-mint-dark text-lg"></i></a></li>
         <li class="">
             <a href="{% url "users:detail" user.pk %}">
                 {%  if request.user.avatar != '' %}
