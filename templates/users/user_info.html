@@ -8,16 +8,18 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div class="flex justify-center flex-wrap">
-            <a href="{% url 'posts:notice' %}"><span class="boards_list"><i class="fas fa-bullhorn bg-mint"></i>공지</span></a>
+            <a href="{% url 'posts:notice' %}"><span class="boards_list"><i
+                    class="fas fa-bullhorn bg-mint"></i>공지</span></a>
             <a href="{% url 'posts:free' %}"><span class="boards_list"><i class="fas fa-user-friends bg-mint"></i>자유게시판</span></a>
-            <a href="{% url 'posts:anon' %}"><span class="boards_list"><i class="fas fa-shoe-prints bg-mint"></i>익명게시판</span></a>
+            <a href="{% url 'posts:anon' %}"><span class="boards_list"><i
+                    class="fas fa-shoe-prints bg-mint"></i>익명게시판</span></a>
         </div>
     {% endif %}
 
     <div class="flex flex-wrap justify-center">
         <div class="xl:w-8/12 max-w-3xl md:w-full">
             {% for user in users %}
-                <div class="flex flex-wrap justify-around m-4 p-4 rounded shadow items-center bg-gray-50">
+                <div class="flex flex-wrap justify-around m-4 p-4 rounded shadow items-center bg-white">
                     {% if user.avatar != '' %}
                         {# <div class="w-9 h-12 bg-cover bg-center" style="background-image: url(media/{{ user.avatar }})"></div> #}
                         <img style="width: 120px; height: 120px;" src="{{ user.avatar.url }}"
@@ -73,7 +75,7 @@
 
         <div class="max-w-3xl w-full xl:w-80 sm:w-full">
             {% if user.is_authenticated %}
-                <div class="m-4 p-4 rounded shadow bg-gray-50">
+                <div class="m-4 p-4 rounded shadow bg-white">
 
                     <p class="font-medium text-lg pb-2">Notifications</p>
                     {% for post in notifications %}
@@ -90,12 +92,12 @@
                                         {{ post.like_sum }}
                                         <i class="fas fa-comment"></i>
                                         {{ post.comments.count }}
-                                </span>
+                            </span>
                         </div>
                     {% endfor %}
                 </div>
 
-                <div class="m-4 p-4 rounded shadow bg-gray-50">
+                <div class="m-4 p-4 rounded shadow bg-white">
 
                     <p class="font-medium text-lg pb-2">Recent Posts</p>
                     {% for post in recent_posts %}
@@ -117,7 +119,7 @@
                     {% endfor %}
                 </div>
 
-                <div class="m-4 p-4 rounded shadow bg-gray-50">
+                <div class="m-4 p-4 rounded shadow bg-white">
 
                     <p class="font-medium text-lg pb-2">Trending Posts</p>
                     {% for post in trending_posts %}
@@ -139,7 +141,7 @@
                     {% endfor %}
                 </div>
 
-                <div class="m-4 p-4 rounded shadow bg-gray-50">
+                <div class="m-4 p-4 rounded shadow bg-white">
 
                     <p class="font-medium text-lg pb-2">Links</p>
                     <i class="fab fa-github text-2xl p-0.5"></i>

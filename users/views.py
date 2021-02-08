@@ -53,7 +53,7 @@ def UserDetail(request, pk):
 
 
 def UserView(request):
-    users = models.User.objects.all()
+    users = models.User.objects.filter(is_real=True)
 
     for user in users:
         # print(user.avatar)
@@ -136,13 +136,35 @@ class UpdateProfileView(SuccessMessageMixin, UpdateView):
     model = models.User
     template_name = "users/update-profile.html"
     fields = (
-        "avatar", "bio", "birthdate",
+        "avatar", "bio", "birthdate", "is_soldier", "mil_start", "mil_fin", "mil_address", "homepage", "github_id",
+        "blog", "boj_id", "student_id", "is_real", "username", "last_name", "first_name",
     )
-
     success_message = "Profile Updated"
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["last_name"].widget.attrs = {"placeholder": "성"}
+        form.fields["first_name"].widget.attrs = {"placeholder": "이름"}
+        form.fields["username"].widget.attrs = {"placeholder": "아이디"}
+        form.fields["bio"].widget.attrs = {"placeholder": "하고 싶은 말"}
+        form.fields["birthdate"].widget.attrs = {"placeholder": "ex) 2000-11-13"}
+        form.fields["is_soldier"].widget.attrs = {"placeholder": "군인인가?"}
+        form.fields["is_real"].widget.attrs = {"placeholder": "실제 계정인가?"}
+
+        form.fields["mil_start"].widget.attrs = {"placeholder": "입영일 ex) 2020-10-10"}
+        form.fields["mil_fin"].widget.attrs = {"placeholder": "전역일 ex) 2022-10-10"}
+        form.fields["mil_address"].widget.attrs = {"placeholder": "부대 주소"}
+        form.fields["homepage"].widget.attrs = {"placeholder": "개인 홈페이지 주소"}
+
+        form.fields["github_id"].widget.attrs = {"placeholder": "GitHub ID"}
+        form.fields["blog"].widget.attrs = {"placeholder": "개인 Blog 주소"}
+        form.fields["boj_id"].widget.attrs = {"placeholder": "백준 ID"}
+        form.fields["student_id"].widget.attrs = {"placeholder": "학번"}
+
+        return form
 
 
 class UpdatePasswordView(SuccessMessageMixin, PasswordChangeView):

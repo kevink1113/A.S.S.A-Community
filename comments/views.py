@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, resolve_url
 from posts import models as post_models
 from . import models
 from django.contrib import messages
@@ -12,8 +12,11 @@ def new_comment(request, pk):
     # post = models.Post.objects.get(pk=post_pk)
     try:
         post = post_models.Post.objects.get(pk=pk)
-        post.comments.create(content=request.POST.get('content'), post=post_models.Post.objects.get(pk=pk), user=request.user)
-        return redirect('posts:detail', pk=pk)
+        comment = post.comments.create(content=request.POST.get('content'), post=post_models.Post.objects.get(pk=pk), user=request.user)
+        return redirect('{}#comment_{}'.format(
+            resolve_url('posts:detail', pk=pk), comment.id
+        ))
+        # return redirect('posts:detail', pk=pk)
     except post_models.Post.DoesNotExist:
         return redirect('posts:detail', pk=pk)
 

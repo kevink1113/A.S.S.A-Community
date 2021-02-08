@@ -9,6 +9,7 @@ from .forms import PostForm
 from .models import Post
 from users import mixins as user_mixins
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models import Count
 
 
 from posts import models as post_models
@@ -19,7 +20,7 @@ class AnonList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     """ PostList Definition """
     model = models.Post
     queryset = models.Post.objects.filter(board__exact="anon")
-    paginate_by = 5
+    paginate_by = 20
     paginate_orphans = 0
     ordering = "-created"
     context_object_name = "posts"
@@ -27,6 +28,14 @@ class AnonList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     def get_context_data(self, **kwargs):
         context = super(AnonList, self).get_context_data(**kwargs)
         context['board'] = "anon"
+        notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
+        recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
+        trending_posts = post_models.Post.objects.annotate(
+            like_sum=Count('like_users') - Count('dislike_users')).order_by(
+            '-like_sum', '-created')[:5]
+        context['notifications'] = notifications
+        context['recent_posts'] = recent_posts
+        context['trending_posts'] = trending_posts
         return context
 
 
@@ -34,7 +43,7 @@ class NoticeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMix
     """ PostList Definition """
     model = models.Post
     queryset = models.Post.objects.filter(board__exact="notice")
-    paginate_by = 5
+    paginate_by = 20
     paginate_orphans = 0
     ordering = "-created"
     context_object_name = "posts"
@@ -42,6 +51,15 @@ class NoticeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMix
     def get_context_data(self, **kwargs):
         context = super(NoticeList, self).get_context_data(**kwargs)
         context['board'] = "notice"
+
+        notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
+        recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
+        trending_posts = post_models.Post.objects.annotate(
+            like_sum=Count('like_users') - Count('dislike_users')).order_by(
+            '-like_sum', '-created')[:5]
+        context['notifications'] = notifications
+        context['recent_posts'] = recent_posts
+        context['trending_posts'] = trending_posts
         return context
 
 
@@ -49,7 +67,7 @@ class FreeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     """ PostList Definition """
     model = models.Post
     queryset = models.Post.objects.filter(board__exact="free")
-    paginate_by = 5
+    paginate_by = 20
     paginate_orphans = 0
     ordering = "-created"
     context_object_name = "posts"
@@ -57,6 +75,15 @@ class FreeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     def get_context_data(self, **kwargs):
         context = super(FreeList, self).get_context_data(**kwargs)
         context['board'] = "free"
+
+        notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
+        recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
+        trending_posts = post_models.Post.objects.annotate(
+            like_sum=Count('like_users') - Count('dislike_users')).order_by(
+            '-like_sum', '-created')[:5]
+        context['notifications'] = notifications
+        context['recent_posts'] = recent_posts
+        context['trending_posts'] = trending_posts
         return context
 
 
@@ -70,10 +97,24 @@ class PostList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     """
     """ PostList Definition """
     model = models.Post
-    paginate_by = 5
+    paginate_by = 20
     paginate_orphans = 0
     ordering = "-created"
     context_object_name = "posts"
+
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data(**kwargs)
+        context['board'] = "post"
+
+        notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
+        recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
+        trending_posts = post_models.Post.objects.annotate(
+            like_sum=Count('like_users') - Count('dislike_users')).order_by(
+            '-like_sum', '-created')[:5]
+        context['notifications'] = notifications
+        context['recent_posts'] = recent_posts
+        context['trending_posts'] = trending_posts
+        return context
 
 
 class PostDetail(DetailView, user_mixins.LoggedInOnlyView, PermissionRequiredMixin):
@@ -102,7 +143,16 @@ class PostDetail(DetailView, user_mixins.LoggedInOnlyView, PermissionRequiredMix
         board = models.Post.objects.get(pk=pk)
         print("제목 =>", board.board)
         context['page_idx'] = page_idx
-        # context['rand'] =
+
+        notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
+        recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
+        trending_posts = post_models.Post.objects.annotate(
+            like_sum=Count('like_users') - Count('dislike_users')).order_by(
+            '-like_sum', '-created')[:5]
+        context['notifications'] = notifications
+        context['recent_posts'] = recent_posts
+        context['trending_posts'] = trending_posts
+
         return context
 
 
@@ -130,7 +180,7 @@ class SearchView(ListView, user_mixins.LoginRequiredMixin):
                 filter_args["board"] = board
 
             qs = models.Post.objects.filter(**filter_args).order_by("-created")
-            paginator = Paginator(qs, 10, orphans=0)
+            paginator = Paginator(qs, 20, orphans=0)
             page = request.GET.get("page", 1)
 
             posts = paginator.get_page(page)

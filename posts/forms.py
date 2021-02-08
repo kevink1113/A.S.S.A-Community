@@ -7,7 +7,7 @@ from django_summernote.widgets import SummernoteWidget
 
 class SearchForm(forms.Form):
     boardChoices = models.Post.BOARD_CHOICES
-    boardChoices.insert(0, (None, '-----'))
+    boardChoices.insert(0, (None, '모든 게시판'))
 
     title = forms.CharField(initial="", required=False)
     user = forms.ModelChoiceField(

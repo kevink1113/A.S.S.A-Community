@@ -3,9 +3,19 @@ from . import models
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
+    """
+    class Meta:
+        model = models.User
+        fields = ("username", "password")
+        widgets = {
+            "username": forms.TextInput(attrs={"placeholder": "아이디"}),
+        }
+    """
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'ID'}))
     # email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "비밀번호 입력"}))
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Password"})
+    )
 
     def clean(self):
         # email = self.cleaned_data.get("email")
@@ -35,11 +45,12 @@ class SignUpForm(forms.ModelForm):
         }
 
     password = forms.CharField(
-        widget = forms.PasswordInput(attrs={"placeholder": "비밀번호"})
+        widget=forms.PasswordInput(attrs={"placeholder": "비밀번호"})
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={"placeholder": "비밀번호 확인"})
     )
+
     # password1 = forms.CharField(widget=forms.PasswordInput, label="비밀번호 확인")
 
     def clean_password1(self):
