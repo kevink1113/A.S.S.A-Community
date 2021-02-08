@@ -6,16 +6,23 @@ from django_summernote.widgets import SummernoteWidget
 
 
 class SearchForm(forms.Form):
+    boardChoices = models.Post.BOARD_CHOICES
+    boardChoices.insert(0, (None, '-----'))
+
     title = forms.CharField(initial="", required=False)
     user = forms.ModelChoiceField(
-        required=False, empty_label="Anyone", queryset=user_models.User.objects.all()
+        required=False, empty_label="아무나", queryset=user_models.User.objects.all()
+    )
+
+    board = forms.ChoiceField(
+        required=False, choices=boardChoices
     )
 
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'board', 'content']
         widgets = {
             'content': SummernoteWidget(),
         }

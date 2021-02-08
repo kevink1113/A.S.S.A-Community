@@ -62,12 +62,12 @@
         </div>
 
 
-        <div class="max-w-full w-full xl:w-80 sm:w-full">
+        <div class="max-w-3xl w-full xl:w-80 sm:w-full">
             {% if user.is_authenticated %}
                     <div class="m-4 p-4 rounded shadow bg-gray-50">
 
                         <p class="font-medium text-lg pb-2">Notifications</p>
-                        {% for post in recent_posts %}
+                        {% for post in notifications %}
                             <div class="flex items-center pb-1">
 
                                 {# Post 이름, 좋아요/댓글 개수 #}
@@ -128,6 +128,16 @@
                                 </span>
                             </div>
                         {% endfor %}
+                    </div>
+
+                    <div class="m-4 p-4 rounded shadow bg-gray-50">
+
+                        <p class="font-medium text-lg pb-2">Links</p>
+                            <i class="fab fa-github text-2xl p-0.5"></i>
+                            <i class="fas fa-home text-2xl rounded-full bg-black text-white"></i>
+                            <i class="text-xl bg-black text-white rounded-full">/<></i>
+                            <i class="fas fa-network-wired text-2xl p-1 bg-black text-white rounded-full"></i>
+
                     </div>
 
             {% endif %}

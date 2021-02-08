@@ -3,9 +3,9 @@
 
 <ul class="flex items-center text-sm font-medium">
     {% if user.is_authenticated %}
-        <li class="mr-3 sm:mr-6"><a href="{% url "users:logout" %}">Log out</a></li>
+        <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url "users:logout" %}">Log out</a></li>
         <li class="mr-3 sm:mr-6"><a href="{% url 'posts:list' %}">Posts</a></li>
-        <li class="mr-3 sm:mr-6"><a href="{% url 'posts:new_post' %}"><i class="fas fa-plus"></i></a></li>
+        <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url 'posts:new_post' %}"><i class="fas fa-plus"></i></a></li>
         <li class="">
             <a href="{% url "users:detail" user.pk %}">
                 {%  if request.user.avatar != '' %}
@@ -16,7 +16,7 @@
             </a>
         </li>
     {% else %}
-        <li class="nav_link"><a href="{% url "users:login" %}">Login</a></li>
-        <li class="nav_link"><a href="{% url "users:signup" %}">Sign up</a></li>
+        <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url "users:login" %}">Login</a></li>
+        <li class=""><a href="{% url "users:signup" %}">Sign up</a></li>
     {% endif %}
 </ul>

@@ -22,6 +22,7 @@
                 글쓴이 {{ post.user }}
                 추천 {{ post.like_sum }}
                 댓글 {{ post.comments.count }}
+                조회수 {{ post.view_count }}
 
                 {% if post in request.user.like_posts.all %}
                     내가 추천한 글!

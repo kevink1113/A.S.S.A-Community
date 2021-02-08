@@ -12,11 +12,11 @@ class Post(core_models.TimeStampModel):
     NOTICE = "notice"
     FREE = "free"
 
-    BOARD_CHOICES = (
+    BOARD_CHOICES = [
         (NOTICE, "공지"),
         (FREE, "자유게시판"),
         (ANONYMOUS, "익명게시판"),
-    )
+    ]
 
     title = models.CharField(max_length=30)
     content = models.TextField()
@@ -34,9 +34,15 @@ class Post(core_models.TimeStampModel):
     like_users = models.ManyToManyField("users.User", related_name='like_posts', blank=True)
     dislike_users = models.ManyToManyField("users.User", related_name='dislike_posts', blank=True)
 
+    view_count = models.PositiveIntegerField(default=0)
+
     def __str__(self):
         return self.title
 
     def like_sum(self):
         return self.like_users.count() - self.dislike_users.count()
         # return self.like - self.dislike
+
+    def view_click(self):
+        self.view_count += 1
+        self.save()

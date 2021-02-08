@@ -70,7 +70,9 @@ def UserView(request):
             user.mil_percentage = round(100 * (1 - date_left / mil_time), 2)
             user.mil_left_date = date_left.days
 
-    recent_posts = post_models.Post.objects.order_by('-created')[:5]
+    notifications = post_models.Post.objects.filter(board="notice").order_by('-created')[:5]
+    print("최근 공지: ", notifications)
+    recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
 
     trending_posts = post_models.Post.objects.annotate(like_sum=Count('like_users') - Count('dislike_users')).order_by(
         '-like_sum', '-created')[:5]
@@ -81,7 +83,8 @@ def UserView(request):
     # trending_posts.annotate(comments_cnt=Count(comment_models.Comment))
 
     return render(request, "users/user_info.html",
-                  {"users": users, "today": datetime.date.today(), "recent_posts": recent_posts,
+                  {"users": users, "today": datetime.date.today(), "notifications": notifications,
+                   "recent_posts": recent_posts,
                    "trending_posts": trending_posts})
 
 
@@ -116,6 +119,7 @@ class SignUpView(FormView):
     template_name = "users/signup.html"
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
+
     # initial = {"first_name": "상원", "last_name": "강", "username": "kevink1113"}
 
     def form_valid(self, form):

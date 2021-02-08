@@ -6,41 +6,117 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <div>
-            <h1>{{ post.title }}</h1>
-            <h3>{{ post.content | safe }}</h3>
-        </div>
-        <div>
-            <h2>
-                By: {{ post.user }}
-                likes: {{ post.like_users.count }}
-                dislikes: {{ post.dislike_users.count }}
-            </h2>
+        <div class="flex">
+            <div class="rounded shadow p-3 mr-3 hidden lg:block h-28 w-24">
+                <ul class="text-sm font-light">
+                    {% if post.board == "notice" %}
+                        <li class="text-mint-dark font-medium"><a href="{% url 'posts:notice' %}">공지사항</a></li>
+                    {% else %}
+                        <li><a href="{% url 'posts:notice' %}">공지사항</a></li>
+                    {% endif %}
 
-            {% if user in post.like_users.all %}
-                <a href="{% url 'posts:LikePost' post.id %}">LIKE</a>
-            {% else %}
-                <a href="{% url 'posts:LikePost' post.id %}">like</a>
-            {% endif %}
+                    {% if post.board == "free" %}
+                        <li class="text-mint-dark font-medium"><a href="{% url 'posts:free' %}">자유게시판</a></li>
+                    {% else %}
+                        <li><a href="{% url 'posts:free' %}">자유게시판</a></li>
+                    {% endif %}
 
-            {% if user in post.dislike_users.all %}
-                <a href="{% url 'posts:disLikePost' post.id %}">DISLIKE</a>
-            {% else %}
-                <a href="{% url 'posts:disLikePost' post.id %}">dislike</a>
-            {% endif %}
+                    {% if post.board == "anon" %}
+                        <li class="text-mint-dark font-medium"><a href="{% url 'posts:anon' %}">익명게시판</a></li>
+                    {% else %}
+                        <li><a href="{% url 'posts:anon' %}">익명게시판</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="w-full">
+                <div class="rounded shadow p-3">
+                    <span class="hidden">{{ post.view_click }}</span>
 
-            <a href="{% url 'posts:delete' post.pk %}">Delete</a>
+                    <p class="font-bold text-xl">{{ post.title }}</p>
+                    <div class="flex justify-between pb-8">
+                        <span class="text-gray-500 font-light text-sm">
+                            by {{ post.user }} |
+                            {% if post.board == "notice" %}
+                                <a href="{% url 'posts:notice' %}">공지</a>
+                            {% elif post.board == "free" %}
+                                <a href="{% url 'posts:free' %}">자유게시판</a>
+                            {% else %}
+                                <a href="{% url 'posts:anon' %}">익명게시판</a>
+                            {% endif %}
+                            | 조회 {{ post.view_count }}
+                        </span>
+                        <span class="text-gray-500 font-light text-sm">
+                            {{ post.created | date:"Y/m/d H:i" }}
+                        </span>
+                    </div>
+                    <div>{{ post.content | safe }}</div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-center">
+                        <div class="mr-5">
+                            {% if user in post.like_users.all %}
+                                <a href="{% url 'posts:LikePost' post.id %}">
+                                    <i class="far fa-thumbs-up rounded-full bg-mint p-3 flex-grow-0 text-2xl text-white"></i>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'posts:LikePost' post.id %}">
+                                    <i class="far fa-thumbs-up rounded-full bg-gray-500 p-3 flex-grow-0 text-2xl text-white"></i>
+                                </a>
+                            {% endif %}
+                            <span class="bg-gray-400 px-1 rounded-full text-white">{{ post.like_users.count }}</span>
+                        </div>
+                        <div>
+                            {% if user in post.dislike_users.all %}
+                                <a href="{% url 'posts:disLikePost' post.id %}">
+                                    <i class="far fa-thumbs-down rounded-full bg-mint p-3 flex-grow-0 text-2xl text-white"></i>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'posts:disLikePost' post.id %}">
+                                    <i class="far fa-thumbs-down rounded-full bg-gray-500 p-3 flex-grow-0 text-2xl text-white"></i>
+                                </a>
+                            {% endif %}
+                            <span class="bg-gray-400 px-1 rounded-full text-white">{{ post.dislike_users.count }}</span>
+                        </div>
+                    </div>
 
-            <h3>Comments</h3>
-            <ul>
-                {% for comment in post.comments.all %}
-                    <li>{{ comment.user }} - {{ comment.content }}</li>
-                {% endfor %}
-            </ul>
+                    {% if request.user == post.user %}
+                        <a href="{% url 'posts:delete' post.pk %}"><i class="fas fa-trash-alt"></i></a>
+                    {% endif %}
 
-            <h1> PAGE: {{ help }}</h1>
-            <a href="{% url 'posts:list' %}?page={{ page_idx }}">목록으로</a>
+                    {% if request.user == post.user %}
+                        <a href="{% url 'posts:modify' post.pk %}">-Modify-</a>
+                    {%  endif %}
 
+                    <p>댓글 {{ post.comments.count }}개</p>
+                    <ul>
+                        {% for comment in post.comments.all %}
+                            {% if comment.user == post.user %}
+                                <li>글쓴이 - {{ comment.content }}</li>
+                            {% else %}
+                                <li>{{ comment.user }} - {{ comment.content }}</li>
+                            {% endif %}
+
+                            {% if comment.user == request.user %}
+                                <a href="{% url 'comments:delete_comment' comment.pk %}">댓글 삭제</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        <form action="{%  url 'comments:new_comment' post.pk %}" method="post" class="flex">
+                            {% csrf_token %}
+                            <textarea name="content" id="content" class="h-16 w-full"></textarea>
+                            <button class="bg-red-500 w-20 ml-3 rounded text-white bg-mint">댓글 작성</button>
+                        </form>
+                    </ul>
+                    {% if post.board == "notice" %}
+                        <a href="{% url 'posts:notice' %}">목록으로</a>
+                    {% elif post.board == "free" %}
+                        <a href="{% url 'posts:free' %}">목록으로</a>
+                    {% else %}
+                        <a href="{% url 'posts:anon' %}">목록으로</a>
+                    {% endif %}
+                </div>
+
+            </div>
         </div>
     {% endif %}
 {% endblock %}
