@@ -23,6 +23,8 @@ class User(AbstractUser):
     boj_id = models.CharField(max_length=30, blank=True, null=True)
     student_id = models.PositiveIntegerField(blank=True, null=True)
     is_real = models.BooleanField(default=True)
+    phone = models.CharField(blank=True, null=True,  max_length=16)
+    address = models.CharField(blank=True, null=True, max_length=100)
 
     # like_posts = models.ManyToManyField( "posts.Post", blank=True, related_name="like_posts")
     # like_comments = models.ManyToManyField("comments.Comment", blank=True, related_name='like_comments')

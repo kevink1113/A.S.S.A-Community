@@ -61,3 +61,10 @@ form {
 body {
   @apply bg-gray-100;
 }
+
+.profile_icon {
+  @apply my-2;
+  i {
+    @apply text-lg p-0 mr-2;
+  }
+}

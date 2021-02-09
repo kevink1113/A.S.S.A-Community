@@ -6,69 +6,123 @@
 {% endblock %}
 
 {% block content %}
-    <div>
-        {%  if user.avatar != '' %}
-            <img style="width: 100px; height: 130px;" src="/media/{{ user.avatar }}"/>
-        {%  else %}
-            <img style="width: 100px; height: 130px;" src="{% static 'img/blank_profile.png' %}"/>
-        {%  endif %}
-
-
-        {{ user.username }}
-        {{ user.last_name }}{{ user.first_name }}
-        {{ user.bio }}
-        학번: {{ user.student_id }}
-
-        <div>
-            <h3>Basic Info</h3>
-            생일: {{ user.birthdate }}
-            {% if user.birthdate|date:"md" == today|date:"md" %}
-                <b>🥳 오늘 생일 🎂</b>
+    <div class="flex flex-col items-center">
+        <div class="z-40 relative top-8">
+            {% if user.avatar != '' %}
+                <img style="width: 200px; height: 200px;" src="/media/{{ user.avatar }}"
+                     class="object-cover object-center rounded-full shadow shadow-xl p-2"/>
+            {% else %}
+                <img style="width: 200px; height: 200px;" src="{% static 'img/blank_profile.png' %}"
+                     class="object-cover object-center rounded-full shadow shadow-xl p-2"/>
             {% endif %}
-            <ul>
-                <li><a href={{ user.homepage }} target="_blank">HomePage</a></li>
-                <li><a href={{ user.blog }} target="_blank">Blog</a></li>
-                <li>GitHub: <a href="https://github.com/{{ user.github_id }}" target="_blank">{{ user.github_id }}</a></li>
-                <li>BOJ: <a href="https://www.acmicpc.net/user/{{ user.boj_id }}" target="_blank">{{ user.boj_id }}</a></li>
-
-            </ul>
 
         </div>
 
+        <div class="w-full xl:w-9/12 px-4 lg:px-6 bg-white rounded-xl shadow-neu">
+            <div class="flex justify-between pt-8 pb-4">
+                <a href="{% url "core:home" %}"><span class="boards_list"><i class="fas fa-chevron-left bg-mint"></i>홈으로</span></a>
+                {% if request.user == user %}
+                    <a href="{% url 'users:update' %}"><span class="boards_list"><i
+                            class="fas fa-user-edit bg-mint"></i>정보 수정</span></a>
+                {% endif %}
+            </div>
+            <div class="flex flex-col items-center">
+                <p class="text-mint font-medium">{{ user.username }}</p>
+                <p class="font-bold text-3xl">{{ user.last_name }}{{ user.first_name }}</p>
+                {% if user.bio != '' %}
+                    <p class="italic font-extralight pt-2">"{{ user.bio }}"</p>
+                {% endif %}
+                {% if user.birthdate|date:"md" == today|date:"md" %}
+                    <b><i class="fas fa-birthday-cake text-mint mr-2"></i>오늘 생일!!</b>
+                {% endif %}
 
-        {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
+            </div>
+
             <div>
-                <h3>🪖군 정보</h3>
+                <p class="text-2xl flex items-center"><i
+                        class="fas fa-user-circle text-white bg-mint p-1 rounded-full mr-2 shadow"></i><span class="text-lg">Basic Info</span>
+                </p>
+                <div class="ml-10">
+                    <p class="profile_icon font-extralight"><i class="fas fa-university text-sogang"></i>학번
+                        - {{ user.student_id }}
+                    </p>
+                    <p class="profile_icon font-extralight"><i class="fas fa-birthday-cake text-indigo-400"></i>생일
+                        - {{ user.birthdate }}</p>
+                    <p class="profile_icon font-extralight"><i class="fas fa-phone-square-alt text-teal-600"></i>전화번호
+                        - {{ user.phone }}</p>
+                </div>
 
-                <ul>
-                    <li>{{ user.mil_address }}</li>
-                    <li>{{ user.mil_start|date:'입영일 Y.m.d' }}</li>
-                    <li>{{ user.mil_fin|date:'전역일 Y.m.d' }}</li>
-                    <li>전역까지 {{ user.mil_fin|timeuntil }} (D-{{ user.mil_left_date }})</li>
-                    <li>{{ user.mil_percentage }}% 수료.</li>
-                    <li><a href="https://www.thecamp.or.kr/eduUnitCafe/viewEduUnitCafeMain.do" target="_blank">인편 쓰러
-                        가기</a></li>
+                <p class="text-2xl flex items-center mt-10"><i
+                        class="fas fa-link text-white bg-mint p-1 rounded-full mr-2 shadow"></i><span class="text-lg">Links & Accounts</span>
+                </p>
+
+                <ul class="pl-10 font-extralight">
+
+                    <li class="my-2"><a href={{ user.homepage }} target="_blank" class="profile_icon">
+                        <i class="fas fa-home text-indigo-400"></i>HomePage</a>
+                    </li>
+                    <li class="my-2"><a href={{ user.blog }} target="_blank" class="profile_icon">
+                        <i class="fas fa-blog text-purple-500"></i>Blog</a>
+                    </li>
+
+                    <li class="my-2"><a href="https://github.com/{{ user.github_id }}" target="_blank"
+                                        class="profile_icon">
+                        <i class="fab fa-github text-black"></i>GitHub - {{ user.github_id }}
+                    </a>
+                    </li>
+                    <li class="my-2"><a href="https://www.acmicpc.net/user/{{ user.boj_id }}" target="_blank"
+                                        class="profile_icon">
+                        <i class="fab fa-bootstrap text-blue-500"></i>BOJ - {{ user.boj_id }}
+                    </a>
+                    </li>
+
                 </ul>
 
-                <svg viewBox="0 0 100 3" xmlns="http://www.w3.org/2000/svg">
-                    <!-- No dashes nor gaps -->
-                    <line x1="0" y1="1" x2="100" y2="1" stroke="black"/>
-                    <line x1="0" y1="1" x2="{{ user.mil_percentage }}" y2="1" stroke="green"/>
-                </svg>
             </div>
-        {% endif %}
 
-        <div>
-            <h3>Recent Posts</h3>
-            {% for post in recent_posts %}
-                <li><a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a></li>
-            {% endfor %}
+
+            {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
+                <div>
+                    <p class="text-2xl flex items-center mt-10 mb-2"><i
+                            class="fas fa-shield-alt text-white bg-mint p-1 rounded-full mr-2 shadow"></i><span
+                            class="text-lg">군 정보</span></p>
+
+                    <div class="pl-10 font-extralight">
+                        <p><span>부대 주소 - </span>{{ user.mil_address }}</p>
+                        <p>{{ user.mil_start|date:'입영일 - Y.m.d' }}</p>
+                        <p>{{ user.mil_fin|date:'전역일 - Y.m.d' }}</p>
+                        <p>전역까지 {{ user.mil_fin|timeuntil }} (D-{{ user.mil_left_date }})</p>
+
+                        <div class="flex justify-between items-baseline my-3">
+                            <p class="font-light">{{ user.mil_percentage }}% 수료.</p>
+                            <p><a href="https://www.thecamp.or.kr/eduUnitCafe/viewEduUnitCafeMain.do"
+                                                  target="_blank">
+                                <span class="boards_list"><i class="far fa-envelope bg-mint"></i>인편 쓰러 가기</span>
+                            </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ml-10">
+                        <svg viewBox="0 0 100 3" xmlns="http://www.w3.org/2000/svg">
+                            <!-- No dashes nor gaps -->
+                            <line x1="0" y1="1" x2="100" y2="1" stroke="lightgray" />
+                            <line x1="0" y1="1" x2="{{ user.mil_percentage }}" y2="1" stroke="rgb(23, 168, 201)"/>
+                        </svg>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div>
+                <p class="text-2xl flex items-center mt-10 mb-2"><i
+                            class="fas fa-quote-right text-white bg-mint p-1 rounded-full mr-2 shadow"></i><span
+                            class="text-lg">Recent Posts</span></p>
+                <ul class="ml-10 font-extralight">
+                    {% for post in recent_posts %}
+                        <li><a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-        <a href="{% url "core:home" %}">홈으로 </a>
-
-        {%  if request.user == user %}
-            <a href="{%  url 'users:update' %}">Update Profile</a>
-        {%  endif %}
 
     </div>
 {% endblock %}

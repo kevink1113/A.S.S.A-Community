@@ -15,6 +15,7 @@
             <div class="p-2 mb-4 font-light rounded-lg shadow-lg">
                 <p class="pr-4 text-lg font-light">프로필 사진</p>
                 {{ form.avatar }}
+                {{ form.bio }}
             </div>
 
 
@@ -32,12 +33,14 @@
                 {{ form.last_name }}
                 {{ form.first_name }}
                 {{ form.username }}
+                {{ form.phone }}
                 {{ form.birthdate }}
                 {{ form.student_id }}
                 {{ form.homepage }}
                 {{ form.boj_id }}
                 {{ form.github_id }}
                 {{ form.blog }}
+                {{ form.address }}
             </div>
             <button class="btn bg-mint text-white">Update Profile</button>
         </form>

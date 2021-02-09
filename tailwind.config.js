@@ -12,6 +12,7 @@ module.exports = {
           DEFAULT: "#17a8c9",
           dark: "#128aa6",
         },
+        sogang: "#b30000",
       },
       boxShadow: {
         "neu": "15px 15px 30px #e6e6e6, -15px -15px 30px #ffffff",

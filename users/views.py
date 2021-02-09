@@ -137,7 +137,7 @@ class UpdateProfileView(SuccessMessageMixin, UpdateView):
     template_name = "users/update-profile.html"
     fields = (
         "avatar", "bio", "birthdate", "is_soldier", "mil_start", "mil_fin", "mil_address", "homepage", "github_id",
-        "blog", "boj_id", "student_id", "is_real", "username", "last_name", "first_name",
+        "blog", "boj_id", "student_id", "is_real", "username", "last_name", "first_name", "phone", "address",
     )
     success_message = "Profile Updated"
 
@@ -163,6 +163,8 @@ class UpdateProfileView(SuccessMessageMixin, UpdateView):
         form.fields["blog"].widget.attrs = {"placeholder": "개인 Blog 주소"}
         form.fields["boj_id"].widget.attrs = {"placeholder": "백준 ID"}
         form.fields["student_id"].widget.attrs = {"placeholder": "학번"}
+        form.fields["phone"].widget.attrs = {"placeholder": "전화번호 ex) 010-0000-0000"}
+        form.fields["address"].widget.attrs = {"placeholder": "집 주소"}
 
         return form
 
