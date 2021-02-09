@@ -6,5 +6,6 @@ from . import models
 class PostAdmin(admin.ModelAdmin):
     """ Post Admin Definition """
     list_filter = ("user", "board", )
+    list_display = ("created", "__str__", "user", "board", "like_sum",)
 
-    list_display = ("__str__", "user", "board", "like_sum",)
+

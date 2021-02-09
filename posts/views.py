@@ -10,7 +10,7 @@ from .models import Post
 from users import mixins as user_mixins
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Count
-
+from datetime import datetime
 
 from posts import models as post_models
 from django.contrib import messages
@@ -28,6 +28,9 @@ class AnonList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
     def get_context_data(self, **kwargs):
         context = super(AnonList, self).get_context_data(**kwargs)
         context['board'] = "anon"
+
+        today = datetime.now()
+        context['today'] = today
         notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
         recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
         trending_posts = post_models.Post.objects.annotate(
@@ -52,6 +55,8 @@ class NoticeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMix
         context = super(NoticeList, self).get_context_data(**kwargs)
         context['board'] = "notice"
 
+        today = datetime.now()
+        context['today'] = today
         notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
         recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
         trending_posts = post_models.Post.objects.annotate(
@@ -76,6 +81,8 @@ class FreeList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
         context = super(FreeList, self).get_context_data(**kwargs)
         context['board'] = "free"
 
+        today = datetime.now()
+        context['today'] = today
         notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
         recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
         trending_posts = post_models.Post.objects.annotate(
@@ -106,6 +113,8 @@ class PostList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin
         context = super(PostList, self).get_context_data(**kwargs)
         context['board'] = "post"
 
+        today = datetime.now()
+        context['today'] = today
         notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
         recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
         trending_posts = post_models.Post.objects.annotate(

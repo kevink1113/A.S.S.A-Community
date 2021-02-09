@@ -10,11 +10,6 @@ class Comment(core_models.TimeStampModel):
         "posts.Post", related_name="comments", on_delete=models.CASCADE
     )
     user = models.ForeignKey("users.User", related_name="comments", on_delete=models.CASCADE)
-    like = models.PositiveIntegerField(default=0)
-    dislike = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.post} - {self.content}"
-
-    def like_sum(self):
-        return self.like - self.dislike

@@ -15,7 +15,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from . import forms
 from django.db.models import Count
 
-
 class LoginView(View):
     def get(self, request):
         form = forms.LoginForm()

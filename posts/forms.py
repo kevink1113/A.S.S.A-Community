@@ -24,5 +24,6 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'board', 'content']
         widgets = {
+            "title": forms.TextInput(attrs={"placeholder": "제목"}),
             'content': SummernoteWidget(),
         }

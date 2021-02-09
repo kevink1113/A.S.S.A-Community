@@ -8,4 +8,4 @@ class CommentAdmin(admin.ModelAdmin):
 
     list_filter = ("user",)
 
-    list_display = ("__str__", "post", "user", "like_sum")
+    list_display = ("created", "__str__", "post", "user",)
