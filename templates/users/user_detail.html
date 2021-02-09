@@ -50,6 +50,8 @@
                         - {{ user.birthdate }}</p>
                     <p class="profile_icon font-extralight"><i class="fas fa-phone-square-alt text-teal-600"></i>전화번호
                         - {{ user.phone }}</p>
+                    <p class="profile_icon font-extralight"><i class="fas fa-map-marked-alt text-blue-500"></i>주소
+                        - {{ user.address }}</p>
                 </div>
 
                 <p class="text-2xl flex items-center mt-10"><i
@@ -112,13 +114,27 @@
                 </div>
             {% endif %}
 
-            <div>
+            <div class="mb-4">
                 <p class="text-2xl flex items-center mt-10 mb-2"><i
                             class="fas fa-quote-right text-white bg-mint p-1 rounded-full mr-2 shadow"></i><span
                             class="text-lg">Recent Posts</span></p>
                 <ul class="ml-10 font-extralight">
                     {% for post in recent_posts %}
-                        <li><a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a></li>
+                        <div class="flex items-center pb-1 xl:pb-2">
+
+                            {# Post 이름, 좋아요/댓글 개수 #}
+                            <p class="flex items-center justify-between w-full border-b py-2">
+                                <a href="{% url "posts:detail" post.pk %}" class="text-sm">
+                                    <span class="block truncate">{{ post.title | truncatechars:18 }}</span>
+                                </a>
+                            </p>
+                            <span class="text-mint font-medium text-sm flex items-center w-16 justify-between border-b py-2">
+                                        <i class="fas fa-arrows-alt-v"></i>
+                                        {{ post.like_sum }}
+                                        <i class="fas fa-comment"></i>
+                                        {{ post.comments.count }}
+                                </span>
+                        </div>
                     {% endfor %}
                 </ul>
             </div>

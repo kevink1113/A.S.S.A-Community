@@ -41,7 +41,7 @@ class SignUpForm(forms.ModelForm):
             "last_name": forms.TextInput(attrs={"placeholder": "성"}),
             "first_name": forms.TextInput(attrs={"placeholder": "이름"}),
             "username": forms.TextInput(attrs={"placeholder": "닉네임"}),
-            "bio": forms.TextInput(attrs={"placeholder": "하고 싶은 말"}),
+            "bio": forms.TextInput(attrs={"placeholder": "하고 싶은 말 (A.S.S.A 인증용)"}),
         }
 
     password = forms.CharField(

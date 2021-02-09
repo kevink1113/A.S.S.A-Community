@@ -46,7 +46,7 @@
 
 
 
-        <table class="w-full text-left shadow-neu rounded bg-white">
+        <table class="w-full text-left shadow-neu rounded bg-white font-extralight">
             <th class="border-b border-gray-500 h-10 pl-3 text-sm font-medium">제목</th>
             <th class="border-b border-gray-500 h-10 text-sm font-medium w-20">글쓴이</th>
             <th class="border-b border-gray-500 h-10 text-sm font-medium w-10 text-center">추천</th>
@@ -56,16 +56,16 @@
             {% for post in posts %}
                 <tr class="border-b border-gray-200 h-10 hover:bg-mint-light">
 
-                    <td class="px-3 text-xs sm:text-base">
+                    <td class="px-3 text-xs sm:text-base cursor-pointer" onclick="location.href='{% url "posts:detail" post.pk %}'">
                         {% if post.user == request.user %}
                             <i class="fas fa-user text-mint pr-0.5"></i>
                         {% endif %}
                         {% if post.like_sum >= 4 %}
-                            <b><a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a></b>
+                            <b>{{ post.title }}</b>
                         {% elif post.like_sum <= -4 %}
-                            <del><a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a></del>
+                            <del>{{ post.title }}</del>
                         {% else %}
-                            <a href="{% url "posts:detail" post.pk %}">{{ post.title }}</a>
+                            {{ post.title }}
                         {% endif %}
                         <span class="text-mint-dark font-medium">[{{ post.comments.count }}]</span>
                     </td>

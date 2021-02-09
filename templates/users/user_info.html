@@ -19,26 +19,29 @@
     <div class="flex flex-wrap justify-center">
         <div class="xl:w-8/12 max-w-3xl md:w-full">
             {% for user in users %}
+
                 <div class="flex flex-wrap justify-around m-4 p-4 rounded shadow items-center bg-white">
-                    {% if user.avatar != '' %}
-                        {# <div class="w-9 h-12 bg-cover bg-center" style="background-image: url(media/{{ user.avatar }})"></div> #}
-                        <img style="width: 120px; height: 120px;" src="{{ user.avatar.url }}"
-                             class="object-cover object-center rounded-full shadow shadow-xl"/>
-                    {% else %}
-                        <img style="width: 120px; height: 120px;" src="{% static 'img/blank_profile.png' %}"
-                             class="object-cover object-center rounded-full shadow shadow-xl"/>
-                    {% endif %}
+                    <a href="{% url "users:detail" user.pk %}">
+                        {% if user.avatar != '' %}
+                            {# <div class="w-9 h-12 bg-cover bg-center" style="background-image: url(media/{{ user.avatar }})"></div> #}
+                            <img style="width: 120px; height: 120px;" src="{{ user.avatar.url }}"
+                                 class="object-cover object-center rounded-full shadow shadow-xl"/>
+                        {% else %}
+                            <img style="width: 120px; height: 120px;" src="{% static 'img/blank_profile.png' %}"
+                                 class="object-cover object-center rounded-full shadow shadow-xl"/>
+                        {% endif %}
+                    </a>
 
                     <div class="flex flex-col w-full px-4 max-w-lg">
                         <a href="{% url "users:detail" user.pk %}" class="flex flex-col font-medium pb-2">
                             <span>{{ user.last_name }}{{ user.first_name }}</span>
-                            <span>{{ user.username }} ></span>
+                            <span>{{ user.username }}<i class="fas fa-chevron-right pl-2 text-mint"></i></span>
                         </a>
 
                         <p class="italic">{{ user.bio }}</p>
                         {% if user.is_soldier == True and user.mil_start != None and user.mil_fin != None %}
-                            <p class="text-sm font-light">
-                                🪖군 복무 중 {{ user.mil_start|date:'Y.m.d' }} ~ {{ user.mil_fin|date:'Y.m.d' }}<br>
+                            <p class="text-sm font-light mt-2">
+                                <i class="fas fa-campground mr-1 text-mint-dark"></i>군 복무 중 {{ user.mil_start|date:'Y.m.d' }} ~ {{ user.mil_fin|date:'Y.m.d' }}<br>
                                 전역까지 {{ user.mil_fin|timeuntil }} (D-{{ user.mil_left_date }})
                             </p>
 
@@ -50,16 +53,18 @@
                             </svg>
 
                         {% endif %}
+
                         {% if user.homepage != None %}
-                            <a href={{ user.homepage }}>HomePage ></a>
+                            <a class="my-0.5" href={{ user.homepage }}>HomePage<i class="fas fa-chevron-right pl-2 text-gray-400"></i></a>
                         {% endif %}
                         {% if user.blog != None %}
-                            <a href={{ user.blog }}>Blog ></a>
+                            <a class="my-0.5" href={{ user.blog }}>Blog<i class="fas fa-chevron-right pl-2 text-gray-400"></i></a>
                         {% endif %}
 
                         {% if user.birthdate|date:"md" == today|date:"md" %}
-                            <b>🥳 오늘 생일 🎂</b>
+                            <b><i class="fas fa-birthday-cake text-mint mr-2"></i>오늘 생일!!</b>
                         {% endif %}
+
                     </div>
 
                     {% comment %}
@@ -73,7 +78,7 @@
         </div>
 
 
-        <div class="max-w-3xl w-full xl:w-80 sm:w-full">
+        <div class="max-w-3xl w-full xl:w-80 sm:w-full font-extralight">
             {% if user.is_authenticated %}
                 <div class="m-4 p-4 rounded shadow bg-white">
 

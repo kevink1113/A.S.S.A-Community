@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views import View
 from . import models, forms
 import datetime
-from django.db.models import F
+from django.db.models import F, Q
 from posts import models as post_models
 from django.shortcuts import redirect, reverse
 from django.contrib.auth import authenticate, login, logout
@@ -46,7 +46,7 @@ def UserDetail(request, pk):
         user.mil_percentage = round(100 * (1 - date_left / mil_time), 2)
         user.mil_left_date = date_left.days
 
-    recent_posts = post_models.Post.objects.filter(user=user).order_by('-created')[:5]
+    recent_posts = post_models.Post.objects.filter(~Q(board="anon"), user=user).order_by('-created')[:5]
 
     return render(request, "users/user_detail.html",
                   {"user": user, "recent_posts": recent_posts, "today": datetime.date.today()})
@@ -150,7 +150,7 @@ class UpdateProfileView(SuccessMessageMixin, UpdateView):
         form.fields["first_name"].widget.attrs = {"placeholder": "이름"}
         form.fields["username"].widget.attrs = {"placeholder": "아이디"}
         form.fields["bio"].widget.attrs = {"placeholder": "하고 싶은 말"}
-        form.fields["birthdate"].widget.attrs = {"placeholder": "ex) 2000-11-13"}
+        form.fields["birthdate"].widget.attrs = {"placeholder": "생일 ex) 2000-11-13"}
         form.fields["is_soldier"].widget.attrs = {"placeholder": "군인인가?"}
         form.fields["is_real"].widget.attrs = {"placeholder": "실제 계정인가?"}
 
