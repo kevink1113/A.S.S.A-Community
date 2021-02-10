@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 
 {% block page_title %}
-    Home
+    {% if board == "notice" %}
+        공지
+    {% elif board == "free" %}
+        자유게시판
+    {% else %}
+        익명게시판
+    {% endif %}
 {% endblock %}
 
 {% block content %}
