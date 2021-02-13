@@ -135,7 +135,13 @@
                                 <span class="text-xs text-red-400">NEW</span>
                             {% endif %}
                         </td>
-                        <td class="text-xs">{{ post.user }}</td>
+                        <td class="text-xs">
+                            {% if post.board == "anon" %}
+                                익명
+                            {% else %}
+                                {{ post.user }}
+                            {% endif %}
+                        </td>
                         <td class="text-xs border-l text-center">{{ post.like_sum }}</td>
                         <td class="text-xs border-l text-center">{{ post.created | date:"H:i"}}</td>
                         <td class="text-xs border-l text-center">{{ post.view_count }}</td>

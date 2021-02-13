@@ -56,7 +56,8 @@
             {% for post in posts %}
                 <tr class="border-b border-gray-200 h-10 hover:bg-mint-light">
 
-                    <td class="px-3 text-xs sm:text-base cursor-pointer" onclick="location.href='{% url "posts:detail" post.pk %}'">
+                    <td class="px-3 text-xs sm:text-base cursor-pointer"
+                        onclick="location.href='{% url "posts:detail" post.pk %}'">
                         {% if post.user == request.user %}
                             <i class="fas fa-user text-mint pr-0.5"></i>
                         {% endif %}
@@ -69,7 +70,13 @@
                         {% endif %}
                         <span class="text-mint-dark font-medium">[{{ post.comments.count }}]</span>
                     </td>
-                    <td class="text-xs">{{ post.user }}</td>
+                    <td class="text-xs">
+                        {% if post.board == "anon" %}
+                            익명
+                        {% else %}
+                            {{ post.user }}
+                        {% endif %}
+                    </td>
                     <td class="text-xs border-l text-center">{{ post.like_sum }}</td>
                     <td class="text-xs border-l text-center">{{ post.created | date:"H:i" }}</td>
                     <td class="text-xs border-l text-center">{{ post.view_count }}</td>
