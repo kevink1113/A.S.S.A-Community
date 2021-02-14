@@ -16,6 +16,32 @@ from posts import models as post_models
 from django.contrib import messages
 
 
+class TrendingList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin):
+    """ PostList Definition """
+    model = models.Post
+    queryset = post_models.Post.objects.annotate(like_sum=Count('like_users') - Count('dislike_users')).order_by(
+        '-like_sum', '-created')
+    paginate_by = 20
+    paginate_orphans = 0
+    # ordering = "-created"
+    context_object_name = "posts"
+
+    def get_context_data(self, **kwargs):
+        context = super(TrendingList, self).get_context_data(**kwargs)
+        context['board'] = "trending"
+        today = datetime.now()
+        context['today'] = today
+        notifications = Post.objects.filter(board="notice").order_by('-created')[:5]
+        recent_posts = post_models.Post.objects.order_by('-created').exclude(board="notice")[:5]
+        trending_posts = post_models.Post.objects.annotate(
+            like_sum=Count('like_users') - Count('dislike_users')).order_by(
+            '-like_sum', '-created')[:5]
+        context['notifications'] = notifications
+        context['recent_posts'] = recent_posts
+        context['trending_posts'] = trending_posts
+        return context
+
+
 class AnonList(ListView, user_mixins.LoginRequiredMixin, PermissionRequiredMixin):
     """ PostList Definition """
     model = models.Post
@@ -237,24 +263,7 @@ def disLikePost(request, pk):
     # 누른 적이 없다면 추가.
     else:
         post.dislike_users.add(request.user)
-    # return HttpResponse()
-    # return render(request, "posts/post_detail.html", {"pk": pk})
-    # return redirect(reverse("posts:detail"))
     return redirect('posts:detail', pk)
-
-
-"""
-def new_post(request):
-    form = PostForm()
-    return render(request, 'posts/new_post.html', {"form": form})
-"""
-
-"""
-class NewPost(FormView):
-    form_class = forms.PostForm
-    template_name = "posts/new_post.html"
-    success_url = reverse_lazy("posts:list")
-"""
 
 
 @login_required()

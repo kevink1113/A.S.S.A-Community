@@ -34,7 +34,7 @@
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Notifications</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:notice' %}">Notifications</a></p>
                     {% for post in notifications %}
                         <div class="flex items-center pb-1">
 
@@ -56,7 +56,7 @@
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Recent Posts</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:list' %}">Recent Posts</a></p>
                     {% for post in recent_posts %}
                         <div class="flex items-center pb-1">
 
@@ -78,7 +78,7 @@
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Trending Posts</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:trending' %}">Trending Posts</a></p>
                     {% for post in trending_posts %}
                         <div class="flex items-center pb-1">
 
@@ -175,7 +175,7 @@
                                             <span class="font-bold text-mint-dark">글쓴이</span>
                                         {% else %}
                                             {% if post.board == "anon" %}
-                                                익 {{ post.user_id }}{% widthratio post.id 1 request.user.id %}
+                                                익 {{ post.user_id }}{% widthratio post.id 1 comment.user.id %}
                                             {% else %}
                                                 {{ comment.user }}
                                             {% endif %}

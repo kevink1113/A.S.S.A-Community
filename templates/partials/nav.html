@@ -1,10 +1,15 @@
 {% load static %}
 {# <a href="{% url "core:home" %}">A.S.S.A</a> #}
 
-<ul class="flex items-center text-sm font-medium">
+<ul class="flex items-center text-sm font-medium hidden sm:flex">
     {% if user.is_authenticated %}
         <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url "users:logout" %}">Log out</a></li>
         <li class="mr-3 sm:mr-6"><a href="{% url 'posts:list' %}">Posts</a></li>
+
+        <li class="mr-3 sm:mr-6"><a href="{% url 'posts:notice' %}">Notice</a></li>
+        <li class="mr-3 sm:mr-6"><a href="{% url 'posts:trending' %}">Trending</a></li>
+        <li class="mr-3 sm:mr-6"><a href="{% url 'users:rank' %}">Ranking</a></li>
+
         <li class="mr-3 sm:mr-6 sm:text-sm"><a href="{% url 'posts:new_post' %}"><i class="fas fa-plus text-mint-dark text-lg"></i></a></li>
         <li class="">
             <a href="{% url "users:detail" user.pk %}">

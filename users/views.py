@@ -13,7 +13,8 @@ from django.shortcuts import redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.messages.views import SuccessMessageMixin
 from . import forms
-from django.db.models import Count
+from django.db.models import Count, Avg, Max, Min, Sum
+
 
 class LoginView(View):
     def get(self, request):
@@ -52,7 +53,7 @@ def UserDetail(request, pk):
 
 
 def UserView(request):
-    users = models.User.objects.filter(is_real=True)
+    users = models.User.objects.filter(is_real=True).order_by("?")
 
     for user in users:
         # print(user.avatar)
@@ -174,3 +175,65 @@ class UpdatePasswordView(SuccessMessageMixin, PasswordChangeView):
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()
+
+
+@login_required()
+def rank(request):
+    """
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = Post(**form.cleaned_data)
+            post.user = request.user
+            post.save()
+            return redirect('posts:list')
+    else:
+        form = PostForm()
+    """
+    users = models.User.objects.all()
+
+    data_posts = []
+    label_posts = []
+
+    data_like = []
+    label_like = []
+
+    data_dislike = []
+    data_sumlike = []
+    for user in users:
+        usr = post_models.Post.objects.filter(user=user)
+        user_posts = usr.count()
+        data_posts.append(user_posts)
+        label_posts.append(user.username)
+        # print(user.username, " : ", user_posts)
+        user_like = usr.aggregate(
+            like_sum=Count("like_users"))
+        user_dislike = usr.aggregate(
+            dislike_sum=Count("dislike_users"))
+        # like2 = user_like.get(like_users)
+        print(user, "=>", user_like, user_like['like_sum'], "-", user_dislike["dislike_sum"])
+
+        data_sumlike.append(user_like['like_sum'] - user_dislike["dislike_sum"])
+        data_like.append(user_like['like_sum'])
+        data_dislike.append(user_dislike["dislike_sum"])
+        label_like.append(user.username)
+
+    # userlist, namelist = zip(sorted(zip(userlist, namelist)))
+    data_sumlike, label_like, data_like, data_dislike = (list(t) for t in zip(
+        *sorted(zip(data_sumlike, label_like, data_like, data_dislike), reverse=True)))
+
+    # arr = post_models.Post.objects.filter(user_id=1).aggregate(Sum("like_users"))
+    # arr2 = arr.get('like_users')
+    # print("랭킹: ", userlist)
+    # print("이름: ", namelist)
+    context = {
+        'label_posts': label_posts,
+        'data_posts': data_posts,
+
+        'label_like': label_like,
+        'data_sumlike': data_sumlike,
+        'data_like': data_like,
+        'data_dislike': data_dislike,
+    }
+    # return render(request, 'core/post_create.html', context)
+    return render(request, 'users/rank.html', context)

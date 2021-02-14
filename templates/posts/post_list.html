@@ -34,13 +34,16 @@
                         class="fas fa-shoe-prints bg-gray-400"></i>익명게시판</span></a>
             {% endif %}
         </div>
+        {% if board == "trending" %}
+            <p class="text-2xl font-medium mb-4 xl:ml-64">Trending Posts</p>
+        {% endif %}
 
         <div class="flex xl:w-10/12 ">
             <div class="p-3 mr-3 hidden xl:block w-80 font-extralight">
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Notifications</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:notice' %}">Notifications</a></p>
                     {% for post in notifications %}
                         <div class="flex items-center pb-1">
 
@@ -62,7 +65,7 @@
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Recent Posts</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:list' %}">Recent Posts</a></p>
                     {% for post in recent_posts %}
                         <div class="flex items-center pb-1">
 
@@ -84,7 +87,7 @@
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Trending Posts</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:trending' %}">Trending Posts</a></p>
                     {% for post in trending_posts %}
                         <div class="flex items-center pb-1">
 

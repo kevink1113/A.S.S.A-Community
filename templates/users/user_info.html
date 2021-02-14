@@ -16,7 +16,7 @@
         </div>
     {% endif %}
 
-    <div class="flex flex-wrap justify-center">
+    <div class="flex flex-wrap flex-wrap-reverse justify-center">
         <div class="xl:w-8/12 max-w-3xl md:w-full">
             {% for user in users %}
 
@@ -82,7 +82,7 @@
             {% if user.is_authenticated %}
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Notifications</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:notice' %}">Notifications</a></p>
                     {% for post in notifications %}
                         <div class="flex items-center pb-1">
 
@@ -110,7 +110,7 @@
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Recent Posts</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:list' %}">Recent Posts</a></p>
                     {% for post in recent_posts %}
                         <div class="flex items-center pb-1">
 
@@ -138,7 +138,7 @@
 
                 <div class="m-4 p-4 rounded shadow bg-white">
 
-                    <p class="font-medium text-lg pb-2">Trending Posts</p>
+                    <p class="font-medium text-lg pb-2"><a href="{% url 'posts:trending' %}">Trending Posts</a></p>
                     {% for post in trending_posts %}
                         <div class="flex items-center pb-1">
 

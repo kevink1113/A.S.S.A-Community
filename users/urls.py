@@ -10,4 +10,5 @@ urlpatterns = [
     path("signup", views.SignUpView.as_view(), name="signup"),
     path("update-profile", views.UpdateProfileView.as_view(), name="update"),
     path("update-password", views.UpdatePasswordView.as_view(), name="password"),
+    path("rank", views.rank, name="rank"),
 ]

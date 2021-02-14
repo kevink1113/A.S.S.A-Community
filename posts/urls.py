@@ -10,6 +10,7 @@ urlpatterns = [
     path("anon/", views.AnonList.as_view(), name="anon"),
     path("notice/", views.NoticeList.as_view(), name="notice"),
     path("free/", views.FreeList.as_view(), name="free"),
+    path("trending/", views.TrendingList.as_view(), name="trending"),
 
     path("search/", views.SearchView.as_view(), name="search"),
     path("like/<int:pk>/", views.LikePost, name="LikePost"),
