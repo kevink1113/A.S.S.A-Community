@@ -1,4 +1,3 @@
-# Ssadam
 ## Small group homepage development
 ### (Custom community website for A-S-S-A group.)
 #### By Django, Tailwind CSS, Gulp (Responsive)
