@@ -2,6 +2,7 @@
 ## Small group homepage development
 ### (Custom community website for A-S-S-A group.)
 #### By Django, Tailwind CSS, Gulp (Responsive)
+##### [❗️ The improved version of this repo is in [SSADAM repository](https://github.com/kevink1113/SSADAM).]
 
 ### Home (🖥 Desktop)
 (below is just a sample data.)
